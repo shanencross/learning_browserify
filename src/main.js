@@ -2,8 +2,9 @@ var boo = require("./boo.js");
 var foo = require("./foo.js");
 
 /**
- * This function adds one to its input.
- * @param {number} num any number
+ * Tests a bunch of boo and foo functions using number parameter
+ * and outputs results to console.
+ * @param {number} num number sent to various foo/boo functions.
  */
 function test(num) {
   boo.setXto3();

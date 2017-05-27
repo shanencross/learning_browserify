@@ -3,11 +3,45 @@
 ### Table of Contents
 
 -   [test](#test)
+-   [src/boo](#srcboo)
+-   [addOne](#addone)
+-   [subtractOne](#subtractone)
+-   [setXto3](#setxto3)
 
 ## test
 
-This function adds one to its input.
+Tests a bunch of boo and foo functions using number parameter
+and outputs results to console.
 
 **Parameters**
 
--   `num` **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** any number
+-   `num` **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** number sent to various foo/boo functions.
+
+## src/boo
+
+boo module.
+Does some example math functions..
+
+## addOne
+
+Add 1 to x.
+
+**Parameters**
+
+-   `x` **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** Any number.
+
+Returns **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** That number, plus one.
+
+## subtractOne
+
+Subtract 1 from x
+
+**Parameters**
+
+-   `x` **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** Any number.
+
+Returns **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** That number, minus one.
+
+## setXto3
+
+Set x property of module to 3.
