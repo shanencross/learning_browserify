@@ -35,41 +35,41 @@
               
                 
                 <li><a
-                  href='#srcboo'
-                  class="">
-                  src/boo
-                  
+                  href='#boo'
+                  class=" toggle-sibling">
+                  boo
+                  <span class='icon'>▸</span>
                 </a>
                 
-                </li>
-              
-                
-                <li><a
-                  href='#addone'
-                  class="">
-                  addOne
+                <div class='toggle-target display-none'>
                   
-                </a>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#subtractone'
-                  class="">
-                  subtractOne
+                  <ul class='list-reset py1-ul pl1'>
+                    <li class='h5'><span>Static members</span></li>
+                    
+                      <li><a
+                        href='#boo.addOne'
+                        class='regular pre-open'>
+                        .addOne
+                      </a></li>
+                    
+                      <li><a
+                        href='#boo.subtractOne'
+                        class='regular pre-open'>
+                        .subtractOne
+                      </a></li>
+                    
+                      <li><a
+                        href='#boo.setXto3'
+                        class='regular pre-open'>
+                        .setXto3
+                      </a></li>
+                    
+                    </ul>
                   
-                </a>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#setxto3'
-                  class="">
-                  setXto3
                   
-                </a>
+                  
+                  
+                </div>
                 
                 </li>
               
@@ -150,8 +150,8 @@ and outputs results to console.</p>
   
   <div class='clearfix'>
     
-    <h3 class='fl m0' id='srcboo'>
-      src/boo
+    <h3 class='fl m0' id='boo'>
+      boo
     </h3>
     
     
@@ -162,7 +162,7 @@ and outputs results to console.</p>
 Does some example math functions..</p>
 
 
-  <div class='pre p1 fill-light mt0'>src/boo</div>
+  <div class='pre p1 fill-light mt0'>boo</div>
   
   
 
@@ -184,26 +184,19 @@ Does some example math functions..</p>
   
 
   
-
+    <div class='py1 quiet mt1 prose-big'>Static Members</div>
+    <div class="clearfix">
   
+    <div class='border-bottom' id='boo.addOne'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>addOne(x)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
 
-  
-</section>
-
-          
-        
-          
-            <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='addone'>
-      addOne
-    </h3>
-    
-    
-  </div>
   
 
   <p>Add 1 to x.</p>
@@ -259,20 +252,19 @@ Does some example math functions..</p>
   
 </section>
 
-          
-        
-          
-            <section class='p2 mb2 clearfix bg-white minishadow'>
-
+      </div>
+    </div>
   
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='subtractone'>
-      subtractOne
-    </h3>
-    
-    
-  </div>
+    <div class='border-bottom' id='boo.subtractOne'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>subtractOne(x)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
   
 
   <p>Subtract 1 from x</p>
@@ -328,20 +320,19 @@ Does some example math functions..</p>
   
 </section>
 
-          
-        
-          
-            <section class='p2 mb2 clearfix bg-white minishadow'>
-
+      </div>
+    </div>
   
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='setxto3'>
-      setXto3
-    </h3>
-    
-    
-  </div>
+    <div class='border-bottom' id='boo.setXto3'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>setXto3()</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
   
 
   <p>Set x property of module to 3.</p>
@@ -367,6 +358,18 @@ Does some example math functions..</p>
   
 
   
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+</div>
 
   
 

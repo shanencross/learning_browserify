@@ -1,8 +1,9 @@
-console.log("running boo...");
 /** boo module.
   * Does some example math functions..
-  * @module src/boo
+  * @module boo
   */
+
+console.log("running boo...");
 
 exports.x = 5;
 
