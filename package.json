@@ -1,0 +1,23 @@
+{
+  "dependencies": {
+    "everpolate": "0.0.3",
+    "mathjs": "3.12.3",
+    "numericjs": "^1.2.6",
+    "uniq": "^1.0.1"
+  },
+  "name": "learning_browserify",
+  "version": "1.0.0",
+  "description": "testing",
+  "main": "src/main.js",
+  "devDependencies": {
+    "browserify": "^14.3.0",
+    "documentation": "4.0.0-rc.1",
+    "watchify": "3.9.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Shanen Cross",
+  "license": "UNLICENSED",
+  "private": true
+}
