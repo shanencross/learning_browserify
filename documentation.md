@@ -3,10 +3,11 @@
 ### Table of Contents
 
 -   [test](#test)
--   [src/boo](#srcboo)
--   [addOne](#addone)
+-   [boo](#boo)
+-   [module:boo.addOne](#modulebooaddone)
 -   [subtractOne](#subtractone)
 -   [setXto3](#setxto3)
+-   [foo](#foo)
 
 ## test
 
@@ -17,12 +18,14 @@ and outputs results to console.
 
 -   `num` **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** number sent to various foo/boo functions.
 
-## src/boo
+## boo
+
+-   **See: module:foo**
 
 boo module.
 Does some example math functions..
 
-## addOne
+## module:boo.addOne
 
 Add 1 to x.
 
@@ -45,3 +48,8 @@ Returns **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Refer
 ## setXto3
 
 Set x property of module to 3.
+
+## foo
+
+foo module.
+???

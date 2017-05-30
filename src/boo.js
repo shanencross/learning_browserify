@@ -1,17 +1,19 @@
 /** boo module.
   * Does some example math functions..
   * @module boo
+  * @see module:foo
   */
 
 console.log("running boo...");
 
-exports.x = 5;
+var x = 5;
 
 /** Add 1 to x.
   * @param {number} x Any number.
   * @return {number} That number, plus one.
+  * @alias module:boo.addOne
   */
-exports.addOne = function(x) {
+function addOne(x) {
   return x + 1;
 }
 
@@ -19,25 +21,23 @@ exports.addOne = function(x) {
   * @param {number} x Any number.
   * @return {number} That number, minus one.
   */
-exports.subtractOne = function(x) {
+function subtractOne(x) {
   return x - 1;
 }
 
 /** Set x property of module to 3.
   */
-exports.setXto3 = function() {
+function setXto3() {
   x = 3;
 }
 
-Object.defineProperty(exports, "x", { get: function() { return x; } });
+module.exports = {
+  addOne: addOne,
+  subtractOne: subtractOne,
 
-// module.exports = {
-//   addOne: addOne,
-//   subtractOne: subtractOne,
-//
-//   setXto3: setXto3,
-//
-//   x: x,
-//   get x() { return x; },
-//   // set x(n) { x=n },
-// };
+  setXto3: setXto3,
+
+  x: x,
+  get x() { return x; },
+  // set x(n) { x=n },
+};

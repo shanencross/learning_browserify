@@ -1,3 +1,8 @@
+/** foo module.
+  * ???
+  * @module foo
+  */
+
 console.log("running foo...");
 
 console.log("requiring boo from foo...");
