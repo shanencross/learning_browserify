@@ -2,21 +2,12 @@
 
 ### Table of Contents
 
--   [test](#test)
 -   [boo](#boo)
 -   [module:boo.addOne](#modulebooaddone)
 -   [subtractOne](#subtractone)
 -   [setXto3](#setxto3)
 -   [foo](#foo)
-
-## test
-
-Tests a bunch of boo and foo functions using number parameter
-and outputs results to console.
-
-**Parameters**
-
--   `num` **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** number sent to various foo/boo functions.
+-   [test](#test)
 
 ## boo
 
@@ -53,3 +44,12 @@ Set x property of module to 3.
 
 foo module.
 ???
+
+## test
+
+Tests a bunch of boo and foo functions using number parameter
+and outputs results to console.
+
+**Parameters**
+
+-   `num` **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** number sent to various foo/boo functions.

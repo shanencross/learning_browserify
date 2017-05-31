@@ -1,0 +1,1155 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>bin_len_faster.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>bin_len_faster.js</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-built_in">console</span>.log(<span class="hljs-string">"Executing bin_len_faster.js"</span>);
+<span class="hljs-keyword">var</span> _ =<span class="hljs-built_in">require</span>(<span class="hljs-string">"lodash"</span>);
+<span class="hljs-keyword">var</span> numeric = <span class="hljs-built_in">require</span>(<span class="hljs-string">"numeric"</span>);
+<span class="hljs-keyword">var</span> math = <span class="hljs-built_in">require</span>(<span class="hljs-string">"mathjs"</span>);
+
+<span class="hljs-keyword">var</span> bin_ima = <span class="hljs-built_in">require</span>(<span class="hljs-string">"./bin_ima.js"</span>)
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">plot_binary</span>(<span class="hljs-params">GM1=<span class="hljs-number">0.5</span>, GM2=<span class="hljs-number">0.5</span>, D=<span class="hljs-number">0.5</span>, cof1=<span class="hljs-number">0.1</span>, cof2=<span class="hljs-number">-0.5</span>,
+                             minXLM=<span class="hljs-number">-3</span>, maxXLM=<span class="hljs-number">3</span>, NPN=<span class="hljs-number">40</span>, NR=<span class="hljs-number">30000</span>,
+                             DR=<span class="hljs-number">0.0001</span>, debug=false</span>) </span>{
+  <span class="hljs-keyword">if</span> (debug === <span class="hljs-literal">true</span>)
+    <span class="hljs-built_in">console</span>.time();</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>console.log(“executing plot_binary function”);
+console.log(<code>${GM1}, ${GM2}, ${D}, ${cof1}, ${cof2}</code>)</p>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>var scope = {GM1: GM1, GM2: GM2, D: D, cof1: cof1, cof2: cof2,
+                   minXLM:minXLM, maxXLM:maxXLM, NPN:NPN};</p>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <h1 id="initialize-arrays">Initialize arrays</h1>
+<h1 id="y-x-coords-of-source-and-magnification-asa">y,x coords of source and magnification ASA</h1>
+<h1 id="define-the-number-of-points-npn-to-use-for-the-trajectory">Define the number of points (NPN) to use for the trajectory</h1>
+<p>NPN = 40;
+var XSA = new Array(NPN).fill(0);
+var YSA = new Array(NPN).fill(0);</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">var</span> ASA = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Array</span>(NPN).fill(<span class="hljs-number">0</span>);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>adapted from python: AIA = np.zeros(shape = (5, NPN))
+var AIA = [];
+for (var i=0; i&lt;5; i++) {
+  AIA.push(new Array(NPN).fill(0));
+}</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+  <span class="hljs-keyword">var</span> XIA = [];
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i=<span class="hljs-number">0</span>; i&lt;<span class="hljs-number">5</span>; i++) {
+    XIA.push(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Array</span>(NPN));
+  }
+  <span class="hljs-keyword">var</span> YIA = [];
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i=<span class="hljs-number">0</span>; i&lt;<span class="hljs-number">5</span>; i++) {
+    YIA.push(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Array</span>(NPN));
+  }
+
+  GM2 = <span class="hljs-number">1</span> - GM1</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p>console.time();</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">var</span> causticAndCrit = findCausticAndCritCurves(GM1, GM2, D, NR, DR);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <p>console.timeEnd();</p>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <h1 id="evaluate-the-linear-trajectory-path">Evaluate the (linear) trajectory path</h1>
+<h1 id="nxs-is-the-trajectory-length-npn-points-">NXS is the trajectory length (NPN points)</h1>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">var</span> NXS = NPN;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <p>XLM = 3;</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">var</span> XSC = numeric.linspace(minXLM, maxXLM, NXS);
+  <span class="hljs-keyword">var</span> XSA = XSC;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <h1 id="specify-the-trajectory">Specify the trajectory</h1>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">var</span> YSC = math.add(math.multiply(-cof1, XSC), cof2)
+  <span class="hljs-keyword">var</span> YSA = YSC;
+
+  <span class="hljs-keyword">var</span> NT = <span class="hljs-number">1</span>;
+  <span class="hljs-keyword">var</span> DT = <span class="hljs-number">0.0</span>;
+  <span class="hljs-keyword">var</span> RC = <span class="hljs-number">0.0</span>;
+  <span class="hljs-keyword">var</span> IT = <span class="hljs-number">1</span>;
+
+  <span class="hljs-keyword">var</span> T = IT * DT
+  <span class="hljs-keyword">var</span> XS = math.add(XSC, math.multiply(RC, math.cos(T)))
+  <span class="hljs-keyword">var</span> YS = math.add(YSC, math.multiply(RC, math.sin(T)));</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-11">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-11">&#182;</a>
+              </div>
+              <h1 id="evaluate-the-magnification">Evaluate the magnification</h1>
+<h1 id="loop-over-source-positions">Loop over source positions</h1>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> IXS=<span class="hljs-number">0</span>; IXS&lt;NXS; IXS++) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-12">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-12">&#182;</a>
+              </div>
+              <h1 id="calculate-positions-of-images-given-a-source-position">Calculate positions of images given a source position</h1>
+<p>console.log(<code>GM1: ${GM1}</code>);
+console.log(<code>GM2: ${GM2}</code>);
+console.log(<code>D: ${D}</code>);
+console.log(<code>XS[IXS]: ${XS[IXS]}</code>);
+console.log(<code>YS[IXS]: ${YS[IXS]}</code>);</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+    XS[IXS] = math.round(XS[IXS], <span class="hljs-number">12</span>);
+    YS[IXS] = math.round(YS[IXS], <span class="hljs-number">12</span>);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-13">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-13">&#182;</a>
+              </div>
+              <p>console.log(<code>rounded XS[IXS]: ${XS[IXS]}</code>);
+console.log(<code>rounded YS[IXS]: ${YS[IXS]}</code>);</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+
+
+    imageparms = bin_ima.bin_ima(GM1, GM2, D,
+                                       XS[IXS], YS[IXS]);
+    transposed_imageparms = math.transpose(imageparms);
+
+    <span class="hljs-keyword">var</span> XI = transposed_imageparms[<span class="hljs-number">0</span>];
+    <span class="hljs-keyword">var</span> YI = transposed_imageparms[<span class="hljs-number">1</span>];
+    <span class="hljs-keyword">var</span> AI = transposed_imageparms[<span class="hljs-number">2</span>];
+    <span class="hljs-keyword">var</span> IMP = transposed_imageparms[<span class="hljs-number">3</span>];</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-14">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-14">&#182;</a>
+              </div>
+              <p>console.log(<code>XI: ${XI}</code>);
+console.log(<code>YI: ${YI}</code>);
+console.log(<code>AI: ${AI}</code>);
+console.log(<code>IMP: ${IMP}</code>);</p>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-15">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-15">&#182;</a>
+              </div>
+              <p>console.log(“—————————“);</p>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-16">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-16">&#182;</a>
+              </div>
+              <p>for (var i in imageparms)
+console.log(imageparms[i]);</p>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-17">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-17">&#182;</a>
+              </div>
+              <h1 id="loop-over-all-images">Loop over all images</h1>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> IM=<span class="hljs-number">0</span>; IM&lt;<span class="hljs-number">5</span>; IM++) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-18">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-18">&#182;</a>
+              </div>
+              <p>AIA[IM][IXS] = AI[IM];</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      ASA[IXS] = math.add(ASA[IXS], math.multiply(IMP[IM], AI[IM]));
+
+      XIA[IM][IXS] = XI[IM];
+      YIA[IM][IXS] = YI[IM];
+    }
+  }
+
+  <span class="hljs-keyword">var</span> normalizedSourcePositions = {<span class="hljs-attr">x</span>: XSA, <span class="hljs-attr">y</span>: YSA};</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-19">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-19">&#182;</a>
+              </div>
+              <p>XIA/YIA column: image number
+XIA/YIA row: x index (ranges from 0 to NPN)</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">var</span> normalizedImagePositions = {<span class="hljs-attr">x</span>: XIA, <span class="hljs-attr">y</span>: YIA};
+
+  <span class="hljs-keyword">if</span> (debug === <span class="hljs-literal">true</span>) {
+    <span class="hljs-built_in">console</span>.timeEnd();
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'done'</span>);
+
+    <span class="hljs-comment">/*console.log("XSA:");
+    for (var i in XSA) {
+      console.log(XSA[i]);
+    }
+
+    console.log("");
+    console.log("ASA:");
+    for (var i in ASA) {
+      console.log(ASA[i]);
+    }*/</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-20">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-20">&#182;</a>
+              </div>
+              <p>return scope; // DEBUG: temp</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  }
+  <span class="hljs-keyword">else</span> {
+    <span class="hljs-keyword">return</span> {
+      <span class="hljs-attr">normalizedSourcePositions</span>: normalizedSourcePositions,
+      <span class="hljs-attr">normalizedImagePositions</span>: normalizedImagePositions,
+      <span class="hljs-attr">magnifs</span>: ASA,
+      <span class="hljs-attr">causticAndCrit</span>: causticAndCrit,
+    };
+  }
+}
+
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">findCausticAndCritCurves</span>(<span class="hljs-params">GM1=<span class="hljs-number">0.5</span>, GM2=<span class="hljs-number">0.5</span>, D=<span class="hljs-number">0.5</span>, NR=<span class="hljs-number">30000</span>,
+                                  DR=<span class="hljs-number">0.0001</span></span>) </span>{
+  <span class="hljs-keyword">var</span> IP = <span class="hljs-number">-1</span>;
+  <span class="hljs-keyword">var</span> D2 = D * D;
+  <span class="hljs-keyword">var</span> D4 = D2 * D2;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-21">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-21">&#182;</a>
+              </div>
+              <p>if NR is defined by DR isn’t, set default NR based on NR value</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">if</span> ( NR !== <span class="hljs-literal">undefined</span> &amp;&amp; NR!== <span class="hljs-literal">null</span> &amp;&amp; NR !== <span class="hljs-literal">NaN</span>
+    &amp;&amp; (DR === <span class="hljs-literal">undefined</span> || DR === <span class="hljs-literal">null</span> || DR === <span class="hljs-literal">NaN</span>)) {
+    DR = <span class="hljs-number">3.0</span>/NR;
+  }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-22">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-22">&#182;</a>
+              </div>
+              <p>var NR = 30000; // # Points to use to plot critical curves and caustics
+var DR = 0.0001; // # Used to define the sampling density of the caustics</p>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-23">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-23">&#182;</a>
+              </div>
+              <h1 id="estimate-criticals-and-caustics">Estimate criticals and caustics</h1>
+<h1 id="perform-repeat-calculations-with-masses-swapped-over">Perform repeat calculations with masses swapped over</h1>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">var</span> critical_points_x1 = [];
+  <span class="hljs-keyword">var</span> critical_points_x2 = [];
+  <span class="hljs-keyword">var</span> critical_points_y1 = [];
+  <span class="hljs-keyword">var</span> critical_points_y2 = [];
+
+  <span class="hljs-keyword">var</span> caustic_points_x1 = [];
+  <span class="hljs-keyword">var</span> caustic_points_x2 = [];
+  <span class="hljs-keyword">var</span> caustic_points_y1 = [];
+  <span class="hljs-keyword">var</span> caustic_points_y2 = [];
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> IQ=<span class="hljs-number">0</span>; IQ&lt;<span class="hljs-number">2</span>; IQ++) {
+    <span class="hljs-keyword">var</span> IR = _.range(<span class="hljs-number">1</span>, NR);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-24">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-24">&#182;</a>
+              </div>
+              <p>var IR = Array(NR).fill().map((e,i)=&gt;i+1);</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+    <span class="hljs-keyword">var</span> R = numeric.mul(IR, DR);
+    <span class="hljs-keyword">var</span> R2 = numeric.mul(R, R);
+    <span class="hljs-keyword">var</span> R4 = numeric.mul(R2, R2);
+
+    <span class="hljs-keyword">var</span> GM1S = GM1 * GM1;
+    <span class="hljs-keyword">var</span> GM2S = GM2 * GM2;
+    <span class="hljs-keyword">var</span> GMXM = GM1 * GM2;
+    <span class="hljs-keyword">var</span> R2P = numeric.add(R2, <span class="hljs-number">4</span> * D2);
+    <span class="hljs-keyword">var</span> R4M = numeric.sub(R4, GM2S);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-25">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-25">&#182;</a>
+              </div>
+              <p>A = 16 <em> D2 </em> R2 <em> (R4M - GMXM)
+16 </em> D2 * R2</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">var</span> A_part1 = numeric.mul(<span class="hljs-number">16</span> * D2, R2)</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-26">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-26">&#182;</a>
+              </div>
+              <p>(R4M - GMXM)</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">var</span> A_paren1 = numeric.sub(R4M, GMXM);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-27">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-27">&#182;</a>
+              </div>
+              <p>A_part1 * A_paren1</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">var</span> A = numeric.mul(A_part1, A_paren1);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-28">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-28">&#182;</a>
+              </div>
+              <p>8 <em> R </em> D <em> (GMXM </em> R2 - (R2 + 4 <em> D2) </em> R4M)
+(R2 + 4 * D2)</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">var</span> B_paren1 = numeric.add(R2, <span class="hljs-number">4</span> * D2);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-29">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-29">&#182;</a>
+              </div>
+              <p>GMXM <em> R2 - (B_paren1) </em> R4M</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">var</span> B_paren2 = numeric.sub(numeric.mul(GMXM, R2),
+                                 numeric.mul(B_paren1, R4M));</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-30">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-30">&#182;</a>
+              </div>
+              <p>8 <em> R </em> D * (B_paren2)</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">var</span> B = numeric.mul(<span class="hljs-number">8</span> * D,
+                        numeric.mul(R,
+                                    B_paren2));</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-31">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-31">&#182;</a>
+              </div>
+              <p> C = (R2P <em> R2P) </em> R4M - GM1S * R4</p>
+<pre><code> - <span class="hljs-number">2</span> * GMXM * R2 * (R2 + <span class="hljs-number">4</span> * D2)
+</code></pre>
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-32">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-32">&#182;</a>
+              </div>
+              <p>(R2P * R2P)</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">var</span> C_paren1 = numeric.mul(R2P, R2P);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-33">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-33">&#182;</a>
+              </div>
+              <p>(R2 + 4 * D2)</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">var</span> C_paren2 = numeric.add(R2, <span class="hljs-number">4</span> * D2);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-34">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-34">&#182;</a>
+              </div>
+              <p>(C_paren1) <em> R4M - GM1S </em> R4</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">var</span> C_part1 = numeric.sub(numeric.mul(C_paren1, R4M),
+                                numeric.mul(GM1S, R4));</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-35">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-35">&#182;</a>
+              </div>
+              <p>2 <em> GMXM </em> R2 * (C_paren2)</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">var</span> C_part2 = numeric.mul(<span class="hljs-number">2</span> * GMXM,
+                              numeric.mul(R2,
+                                          C_paren2));</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-36">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-36">&#182;</a>
+              </div>
+              <p>C_part1 - C_part2</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">var</span> C = numeric.sub(C_part1, C_part2);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-37">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-37">&#182;</a>
+              </div>
+              <p>C = C + 16 <em> GM1 </em> GM2 <em> D2 </em> R2
+16 <em> GM1 </em> GM2 <em> D2 </em> R2</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">var</span> C_product = numeric.mul(<span class="hljs-number">16</span> * D2 * GM1 * GM2, R2);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-38">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-38">&#182;</a>
+              </div>
+              <p>C + C_product</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    C = numeric.add(C, C_product);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-39">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-39">&#182;</a>
+              </div>
+              <h1 id="calculate-the-determinant-dt">Calculate the determinant DT</h1>
+<p>DT = B <em> B - 4 </em> A * C</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">var</span> DT = numeric.sub(numeric.mul(B,
+                                     B),
+                         numeric.mul(<span class="hljs-number">4</span>,
+                                     numeric.mul(A,
+                                                 C)));</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-40">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-40">&#182;</a>
+              </div>
+              <h1 id="when-the-determinant-is-0-calculate-the-values-of-cos-theta-c1-c2">When the determinant is &gt;= 0 calculate the values of cos(theta) C1, C2</h1>
+<h1 id="modify-relevant-arrays-accordingly">Modify relevant arrays accordingly</h1>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">var</span> DTge0 = [];
+    <span class="hljs-keyword">var</span> DTge0_sqrt = [];
+    <span class="hljs-keyword">var</span> DTge0_neg_sqrt = [];
+    <span class="hljs-keyword">var</span> R_DTgt0 = [];
+    <span class="hljs-keyword">var</span> R2_DTgt0 = [];
+    <span class="hljs-keyword">var</span> B_DTgt0 = [];
+    <span class="hljs-keyword">var</span> A_DTgt0 = [];
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i=<span class="hljs-number">0</span>; i&lt;DT.length; i++) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-41">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-41">&#182;</a>
+              </div>
+              <p>might need “almostEquals” here</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">if</span> (DT[i] &gt;= <span class="hljs-number">0</span> || almostEquals(DT[i], <span class="hljs-number">0</span>) === <span class="hljs-literal">true</span>) {
+        DTge0.push(DT[i]);
+        <span class="hljs-keyword">var</span> DT_element_sqrt = <span class="hljs-built_in">Math</span>.sqrt(DT[i]);
+        DTge0_sqrt.push(DT_element_sqrt);
+        DTge0_neg_sqrt.push(-DT_element_sqrt);
+        R_DTgt0.push(R[i]);
+        R2_DTgt0.push(R2[i]);
+        B_DTgt0.push(B[i]);
+        A_DTgt0.push(A[i]);
+      }
+    }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-42">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-42">&#182;</a>
+              </div>
+              <h1 id="evaluate-c1-c2">Evaluate C1, C2</h1>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">var</span> C_denominator = numeric.mul(<span class="hljs-number">2</span>, A_DTgt0);
+    <span class="hljs-keyword">var</span> C1_numerator = numeric.sub(DTge0_sqrt, B_DTgt0)
+    <span class="hljs-keyword">var</span> C2_numerator = numeric.sub(DTge0_neg_sqrt, B_DTgt0);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-43">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-43">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">var</span> C1 = numeric.div(C1_numerator, C_denominator);
+    <span class="hljs-keyword">var</span> C2 = numeric.div(C2_numerator, C_denominator);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-44">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-44">&#182;</a>
+              </div>
+              <h1 id="when-abs-c1-or-abs-c2-are-1-append-point-to-critical-and-caustic-curves">When abs(C1) or abs(C2) are &lt;=1 append point to critical and caustic curves</h1>
+<h1 id="isolate-the-indexes-of-where-the-absolute-values-of-c1-and-c2-are-1">Isolate the indexes of where the absolute values of C1 and C2 are &lt;= 1</h1>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">var</span> idxC1le1 = [];
+    <span class="hljs-keyword">var</span> idxC2le1 = [];
+
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i=<span class="hljs-number">0</span>; i&lt;C1.length; i++) {
+      <span class="hljs-keyword">if</span> (<span class="hljs-built_in">Math</span>.abs(C1[i]) &lt;= <span class="hljs-number">1</span> || almostEquals(C1[i], <span class="hljs-number">1</span>) === <span class="hljs-literal">true</span>) {
+        idxC1le1.push(i);
+      }
+
+      <span class="hljs-keyword">if</span> (<span class="hljs-built_in">Math</span>.abs(C2[i]) &lt;= <span class="hljs-number">1</span> || almostEquals(C2[i], <span class="hljs-number">1</span>) === <span class="hljs-literal">true</span>) {
+        idxC2le1.push(i);
+      }
+    }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-45">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-45">&#182;</a>
+              </div>
+              <h1 id="set-up-subsamples-from-relevant-arrays">Set up subsamples from relevant arrays</h1>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">var</span> Rmod2_C1 = []; <span class="hljs-comment">// Debug: optimize by setting array length from start?</span>
+    <span class="hljs-keyword">var</span> R2mod2_C1 = [];
+    <span class="hljs-keyword">var</span> C1le1 = [];
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i=<span class="hljs-number">0</span>; i&lt;idxC1le1.length; i++) {
+      <span class="hljs-keyword">var</span> index = idxC1le1[i];
+      Rmod2_C1.push(R_DTgt0[index]);
+      R2mod2_C1.push(R2_DTgt0[index]);
+      C1le1.push(C1[index]);
+    }
+
+    <span class="hljs-keyword">var</span> Rmod2_C2 = [];
+    <span class="hljs-keyword">var</span> R2mod2_C2 = [];
+    <span class="hljs-keyword">var</span> C2le1 = [];
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i=<span class="hljs-number">0</span>; i&lt;idxC2le1.length; i++) {
+      <span class="hljs-keyword">var</span> index = idxC2le1[i];
+      Rmod2_C2.push(R_DTgt0[index]);
+      R2mod2_C2.push(R2_DTgt0[index]);
+      C2le1.push(C2[index]);
+    }
+
+    <span class="hljs-keyword">var</span> X1 = numeric.mul(Rmod2_C1, C1le1);
+    <span class="hljs-keyword">var</span> X2 = numeric.mul(Rmod2_C2, C2le1);
+
+    <span class="hljs-keyword">var</span> S1_paren = numeric.sub(<span class="hljs-number">1</span>, numeric.mul(C1le1, C1le1));
+    <span class="hljs-keyword">var</span> S1 = numeric.sqrt(S1_paren);
+
+    <span class="hljs-keyword">var</span> S2_paren = numeric.sub(<span class="hljs-number">1</span>, numeric.mul(C2le1, C2le1));
+    <span class="hljs-keyword">var</span> S2 = numeric.sqrt(S2_paren);
+
+    <span class="hljs-keyword">var</span> Y1 = numeric.mul(Rmod2_C1, S1);
+    <span class="hljs-keyword">var</span> Y2 = numeric.mul(Rmod2_C2, S2);
+
+    <span class="hljs-keyword">var</span> X_C1 = numeric.sub(X1, D);
+    <span class="hljs-keyword">var</span> X_C2 = numeric.sub(X2, D);
+
+    <span class="hljs-keyword">var</span> Y_C1 = Y1;
+    <span class="hljs-keyword">var</span> Y_C2 = Y2;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-46">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-46">&#182;</a>
+              </div>
+              <h1 id="append-to-critical-points">Append to critical points</h1>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">var</span> PXCRIT_C1 = numeric.mul(IP, X_C1);
+    <span class="hljs-keyword">var</span> PYCRIT_C1 = numeric.mul(IP, Y_C1);
+
+    <span class="hljs-keyword">var</span> PXCRIT_C2 = numeric.mul(IP, X_C2);
+    <span class="hljs-keyword">var</span> PYCRIT_C2 = numeric.mul(IP, Y_C2);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-47">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-47">&#182;</a>
+              </div>
+              <p>index where points transition
+from C1 points to C2 points;
+a gap we should jump over if connecting points with lines
+when drawing</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">var</span> C1_C2_transitionIndex = PXCRIT_C1.length;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-48">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-48">&#182;</a>
+              </div>
+              <p>var critical_points_x1 = PXCRIT_C1.concat(PXCRIT_C2);
+var critical_points_x2 = critical_points_x1; // Debug: make a copy of the array?</p>
+<p>var critical_points_y1 = PYCRIT_C1.concat(PYCRIT_C2);
+var critical_points_y2 = numeric.neg(PYCRIT_C1).concat(numeric.neg(PYCRIT_C2));</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+    critical_points_x1 = critical_points_x1.concat(PXCRIT_C1);
+    critical_points_x1 = critical_points_x1.concat(PXCRIT_C2);
+
+    critical_points_x2 = critical_points_x2.concat(PXCRIT_C1);
+    critical_points_x2 = critical_points_x2.concat(PXCRIT_C2);
+
+    critical_points_y1 = critical_points_y1.concat(PYCRIT_C1);
+    critical_points_y1 = critical_points_y1.concat(PYCRIT_C2);
+
+    critical_points_y2 = critical_points_y2.concat(numeric.neg(PYCRIT_C1));
+    critical_points_y2 = critical_points_y2.concat(numeric.neg(PYCRIT_C2));</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-49">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-49">&#182;</a>
+              </div>
+              <h1 id="set-up-arrays-to-use-for-mapping-to-caustics">Set up arrays to use for mapping to caustics</h1>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">var</span> RD2_C1 = numeric.add(R2mod2_C1, <span class="hljs-number">4</span> * D2);
+    <span class="hljs-keyword">var</span> RD2_C2 = numeric.add(R2mod2_C2, <span class="hljs-number">4</span> * D2);
+
+    <span class="hljs-keyword">var</span> UP1_C1 = numeric.sub(X1, <span class="hljs-number">2</span> * D);
+    <span class="hljs-keyword">var</span> UP1_C2 = numeric.sub(X2, <span class="hljs-number">2</span> * D);
+
+    <span class="hljs-keyword">var</span> UP2_C1 = X1;
+    <span class="hljs-keyword">var</span> UP2_C2 = X2;
+
+    <span class="hljs-keyword">var</span> DN1_C1 = numeric.sub(RD2_C1, numeric.mul(<span class="hljs-number">4</span> * D, X1));
+    <span class="hljs-keyword">var</span> DN1_C2 = numeric.sub(RD2_C2, numeric.mul(<span class="hljs-number">4</span> * D, X2));
+
+    <span class="hljs-keyword">var</span> DN2_C1 = R2mod2_C1;
+    <span class="hljs-keyword">var</span> DN2_C2 = R2mod2_C2;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-50">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-50">&#182;</a>
+              </div>
+              <h1 id="map-critical-curves-to-caustics">Map critical curves to caustics</h1>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">var</span> XC_C1_part1 = numeric.mul(GM1, numeric.div(UP1_C1, DN1_C1));
+    <span class="hljs-keyword">var</span> XC_C1_part2 = numeric.mul(GM2, numeric.div(UP2_C1, DN2_C1));
+    <span class="hljs-keyword">var</span> XC_C1 = numeric.sub(numeric.sub(X1, XC_C1_part1), XC_C1_part2);
+
+    <span class="hljs-keyword">var</span> XC_C2_part1 = numeric.mul(GM1, numeric.div(UP1_C2, DN1_C2));
+    <span class="hljs-keyword">var</span> XC_C2_part2 = numeric.mul(GM2, numeric.div(UP2_C2, DN2_C2));
+    <span class="hljs-keyword">var</span> XC_C2 = numeric.sub(numeric.sub(X2, XC_C2_part1), XC_C2_part2);
+
+    <span class="hljs-keyword">var</span> XC_C1 = numeric.sub(XC_C1, D);
+    <span class="hljs-keyword">var</span> XC_C2 = numeric.sub(XC_C2, D);
+
+    <span class="hljs-keyword">var</span> YC_C1_part1 = numeric.div(GM1, DN1_C1);
+    <span class="hljs-keyword">var</span> YC_C1_part2 = numeric.div(GM2, DN2_C1);
+    <span class="hljs-keyword">var</span> YC_C1_part3 = numeric.sub(<span class="hljs-number">1.0</span>, YC_C1_part1);
+    <span class="hljs-keyword">var</span> YC_C1_part4 = numeric.sub(YC_C1_part3, YC_C1_part2);
+    <span class="hljs-keyword">var</span> YC_C1 = numeric.mul(Y1, YC_C1_part4);
+
+    <span class="hljs-keyword">var</span> YC_C2_part1 = numeric.div(GM1, DN1_C2);
+    <span class="hljs-keyword">var</span> YC_C2_part2 = numeric.div(GM2, DN2_C2);
+    <span class="hljs-keyword">var</span> YC_C2_part3 = numeric.sub(<span class="hljs-number">1.0</span>, YC_C2_part1);
+    <span class="hljs-keyword">var</span> YC_C2_part4 = numeric.sub(YC_C2_part3, YC_C2_part2);
+    <span class="hljs-keyword">var</span> YC_C2 = numeric.mul(Y2, YC_C2_part4);
+
+    <span class="hljs-keyword">var</span> PXCAUS_C1 = numeric.mul(IP, XC_C1);
+    <span class="hljs-keyword">var</span> PXCAUS_C2 = numeric.mul(IP, XC_C2);
+
+    <span class="hljs-keyword">var</span> PYCAUS_C1 = numeric.mul(IP, YC_C1);
+    <span class="hljs-keyword">var</span> PYCAUS_C2 = numeric.mul(IP, YC_C2);
+
+    caustic_points_x1 = caustic_points_x1.concat(PXCAUS_C1);
+    caustic_points_x1 = caustic_points_x1.concat(PXCAUS_C2);
+
+    caustic_points_x2 = caustic_points_x2.concat(PXCAUS_C1);
+    caustic_points_x2 = caustic_points_x2.concat(PXCAUS_C2);
+
+    caustic_points_y1 = caustic_points_y1.concat(PYCAUS_C1);
+    caustic_points_y1 = caustic_points_y1.concat(PYCAUS_C2);
+
+    caustic_points_y2 = caustic_points_y2.concat(numeric.neg(PYCAUS_C1));
+    caustic_points_y2 = caustic_points_y2.concat(numeric.neg(PYCAUS_C2));</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-51">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-51">&#182;</a>
+              </div>
+              <p>var caustic_points_x1 = PXCAUS_C1.concat(PXCAUS_C2);
+var caustic_points_x2 = caustic_points_x1; // Debug: make a copy of the array?</p>
+<p>var caustic_points_y1 = PYCAUS_C1.concat(PYCAUS_C2);
+var caustic_points_y2 = numeric.neg(PYCAUS_C1).concat(numeric.neg(PYCAUS_C2));</p>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-52">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-52">&#182;</a>
+              </div>
+              <h1 id="swap-the-masses-and-repeat-the-calculation">Swap the masses and repeat the calculation</h1>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">var</span> GM0 = GM1;
+    GM1 = GM2;
+    GM2 = GM0;
+    IP = -IP;
+  }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-53">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-53">&#182;</a>
+              </div>
+              <p>window.alert(“PXCAUS_C1 length: “ + PXCAUS_C1.length);
+window.alert(“PXCAUS_C2 length: “ + PXCAUS_C2.length);
+window.alert(“caustic_points_x1 length: “ + caustic_points_x1.length);</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+  <span class="hljs-keyword">var</span> caustic = {
+    <span class="hljs-attr">x1</span>: caustic_points_x1,
+    <span class="hljs-attr">x2</span>: caustic_points_x2,
+    <span class="hljs-attr">y1</span>: caustic_points_y1,
+    <span class="hljs-attr">y2</span>: caustic_points_y2,
+    <span class="hljs-attr">transitionIndex</span>: C1_C2_transitionIndex,
+  };
+
+  <span class="hljs-keyword">var</span> crit = {
+    <span class="hljs-attr">x1</span>: critical_points_x1,
+    <span class="hljs-attr">x2</span>: critical_points_x2,
+    <span class="hljs-attr">y1</span>: critical_points_y1,
+    <span class="hljs-attr">y2</span>: critical_points_y2,
+    <span class="hljs-attr">transitionIndex</span>: C1_C2_transitionIndex,
+  };
+
+  <span class="hljs-keyword">var</span> causticAndCritCurves = {
+    <span class="hljs-attr">caustic</span>: caustic,
+    <span class="hljs-attr">crit</span>: crit,
+  };
+
+  <span class="hljs-keyword">return</span> causticAndCritCurves;
+}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-54">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-54">&#182;</a>
+              </div>
+              <p>NOTE: Hacky – fix</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">almostEquals</span>(<span class="hljs-params">a, b, epsilon=<span class="hljs-number">1e-12</span></span>) </span>{
+  <span class="hljs-keyword">return</span> (<span class="hljs-built_in">Math</span>.abs(a - b) &lt; epsilon);
+}
+
+<span class="hljs-built_in">module</span>.exports = {
+  <span class="hljs-attr">plot_binary</span>: plot_binary,</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-55">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-55">&#182;</a>
+              </div>
+              <p>findCausticAndCritCurves: findCausticAndCritCurves,</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>};</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>

@@ -1,0 +1,3880 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>PSPL_binary_microlensing_event_lens_plane.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>PSPL_binary_microlensing_event_lens_plane.js</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-built_in">console</span>.log(<span class="hljs-string">"Executing PSPL_binary_microlensing_event_lens_plane.js"</span>);
+
+<span class="hljs-keyword">var</span> _ = <span class="hljs-built_in">require</span>(<span class="hljs-string">"lodash"</span>);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>var eventModule = PSPL_binary_microlensing_event;</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> eventModule = <span class="hljs-built_in">require</span>(<span class="hljs-string">"./PSPL_binary_microlensing_event.js"</span>)
+
+<span class="hljs-keyword">var</span> initialized = <span class="hljs-literal">false</span>; <span class="hljs-comment">// whether module init function has been executed</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>base variables (borders)</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> picLeftBorder = <span class="hljs-number">50</span>;
+<span class="hljs-keyword">var</span> picTopBorder = <span class="hljs-number">50</span>;
+<span class="hljs-keyword">var</span> picWidth = <span class="hljs-number">400</span>;
+<span class="hljs-keyword">var</span> picHeight = <span class="hljs-number">300</span>;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>base variables (trails)</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> picLeftTrail = <span class="hljs-number">10</span>;
+<span class="hljs-keyword">var</span> picRightTrail = <span class="hljs-number">0</span>;
+<span class="hljs-keyword">var</span> picTopTrail = <span class="hljs-number">0</span>;
+<span class="hljs-keyword">var</span> picBottomTrail = <span class="hljs-number">10</span>;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>plot range/scale</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> dayWidth = <span class="hljs-number">30</span>;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p>var thetaXwidth = 4/3;</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> thetaXwidth = <span class="hljs-number">4</span>;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <p>var thetaYheight = 1; // mas</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> thetaYheight = <span class="hljs-number">3</span>;
+<span class="hljs-keyword">var</span> xAxisInitialDay = <span class="hljs-number">-15</span>;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <p>var xAxisInitialThetaX = -(4/3)/2</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> xAxisInitialThetaX = -(<span class="hljs-number">4</span>)/<span class="hljs-number">2</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <p>var yAxisInitialThetaY = -0.5; // half of thetaYheight so that 0 is the middle</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> yAxisInitialThetaY = <span class="hljs-number">-3</span>/<span class="hljs-number">2</span>;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <p>var xGridStepDefault = 0.1;</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> xGridStepDefault = <span class="hljs-number">0.25</span>;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-11">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-11">&#182;</a>
+              </div>
+              <p>var yGridStepDefault = 0.1;</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> yGridStepDefault = <span class="hljs-number">0.25</span>;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-12">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-12">&#182;</a>
+              </div>
+              <p>lens (thetaX, thetaY) position in milliarcseconds</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Lens</span>(<span class="hljs-params">xPos, yPos, radius, color, outlineWidth, outlineColor,
+              ringRadiusX, ringRadiusY,
+              ringColor, ringWidth, dashedRingLength, dashedRingSpacing</span>) </span>{
+  <span class="hljs-keyword">this</span>.updatePos = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">xPos, yPos</span>) </span>{
+    <span class="hljs-keyword">this</span>.pos = {
+      <span class="hljs-attr">x</span>: xPos,
+      <span class="hljs-attr">y</span>: yPos,
+    };
+
+    <span class="hljs-keyword">this</span>.pixelPos = {
+      <span class="hljs-attr">x</span>: thetaXtoPixel(xPos),
+      <span class="hljs-attr">y</span>: thetaYtoPixel(yPos),
+    };
+  }
+
+  <span class="hljs-keyword">this</span>.updatePos(xPos, yPos);
+
+  <span class="hljs-keyword">this</span>.radius = <span class="hljs-number">2</span>;
+
+  <span class="hljs-keyword">this</span>.color = <span class="hljs-string">"red"</span>;
+  <span class="hljs-keyword">this</span>.outlineWidth = outlineWidth;
+  <span class="hljs-keyword">this</span>.outlineColor = outlineColor;
+
+  <span class="hljs-keyword">this</span>.ring = {
+    <span class="hljs-attr">radius</span>: {
+      <span class="hljs-attr">x</span>: ringRadiusX,
+      <span class="hljs-attr">y</span>: ringRadiusY,
+    },
+    <span class="hljs-attr">color</span>: ringColor,
+    <span class="hljs-attr">width</span>: ringWidth,
+    <span class="hljs-attr">dashedLength</span>: dashedRingLength,
+    <span class="hljs-attr">dashedSpacing</span>: dashedRingSpacing,
+  };
+}
+
+<span class="hljs-keyword">var</span> lens1;
+<span class="hljs-keyword">var</span> lens2;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-13">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-13">&#182;</a>
+              </div>
+              <p>base variables (background/picture aesthetics)</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> backgroundColor = <span class="hljs-string">"#ffffe6"</span>;
+<span class="hljs-keyword">var</span> picBackgroundColor = <span class="hljs-string">"#eff"</span>;
+<span class="hljs-keyword">var</span> picBorderColor = <span class="hljs-string">"grey"</span>;
+<span class="hljs-keyword">var</span> picBorderWidth = <span class="hljs-number">1</span>;
+
+<span class="hljs-keyword">var</span> ringColor = <span class="hljs-string">"dimgrey"</span>;
+<span class="hljs-keyword">var</span> ringWidth = <span class="hljs-number">2</span>;
+<span class="hljs-keyword">var</span> dashedRingLength = <span class="hljs-number">5</span>;
+<span class="hljs-keyword">var</span> dashedRingSpacing = <span class="hljs-number">5</span>;
+
+<span class="hljs-keyword">var</span> pathColor = <span class="hljs-string">"blue"</span>;
+<span class="hljs-keyword">var</span> pathWidth = <span class="hljs-number">2</span>;
+
+<span class="hljs-keyword">var</span> dashedPathColor = <span class="hljs-string">"green"</span>;
+<span class="hljs-keyword">var</span> dashedPathWidth = <span class="hljs-number">2</span>;
+<span class="hljs-keyword">var</span> dashedPathLength = <span class="hljs-number">8</span>;
+<span class="hljs-keyword">var</span> dashedPathSpacing = <span class="hljs-number">10</span>;
+
+<span class="hljs-keyword">var</span> sourceColor = <span class="hljs-string">"#004d4d"</span>; <span class="hljs-comment">// darker teal</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-14">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-14">&#182;</a>
+              </div>
+              <p>initialized elsewhere in function</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> sourceRadius; <span class="hljs-comment">// mas</span>
+<span class="hljs-keyword">var</span> sourceOutlineWidth = <span class="hljs-number">2</span>;
+<span class="hljs-keyword">var</span> sourceOutlineColor = <span class="hljs-string">"teal"</span>;
+
+<span class="hljs-keyword">var</span> lensRadius = <span class="hljs-number">2</span>;
+<span class="hljs-keyword">var</span> lensColor = <span class="hljs-string">"red"</span>;
+<span class="hljs-keyword">var</span> lensOutlineWidth = <span class="hljs-number">2</span>;
+<span class="hljs-keyword">var</span> lensOutlineColor = lensColor;
+
+<span class="hljs-keyword">var</span> uArrowColor;
+<span class="hljs-keyword">var</span> uArrowWidth;
+
+<span class="hljs-keyword">var</span> axisColor = <span class="hljs-string">"black"</span>;
+<span class="hljs-keyword">var</span> axisWidth = <span class="hljs-string">"2"</span>;
+
+<span class="hljs-keyword">var</span> gridColor = <span class="hljs-string">"grey"</span>;
+<span class="hljs-keyword">var</span> gridWidth = <span class="hljs-number">1</span>;
+
+<span class="hljs-keyword">var</span> lensedImageRadius = <span class="hljs-number">2</span>;
+<span class="hljs-keyword">var</span> lensedImageLineWidth = <span class="hljs-number">2</span>;
+<span class="hljs-keyword">var</span> dashedLensedImageLength = <span class="hljs-number">5</span>;
+<span class="hljs-keyword">var</span> dashedLensedImageSpacing = <span class="hljs-number">0</span>;
+<span class="hljs-keyword">var</span> lensedImagePlusColor = <span class="hljs-string">"purple"</span>;
+<span class="hljs-keyword">var</span> lensedImagePlusOutlineColor = <span class="hljs-string">"fuchsia"</span>;
+<span class="hljs-keyword">var</span> lensedImageMinusColor = <span class="hljs-string">"green"</span>;
+<span class="hljs-keyword">var</span> lensedImageMinusOutlineColor = <span class="hljs-string">"lime"</span>;
+
+<span class="hljs-keyword">var</span> causticColor1 = <span class="hljs-string">"fuchsia"</span>;
+<span class="hljs-keyword">var</span> causticColor2 = <span class="hljs-string">"purple"</span>;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-15">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-15">&#182;</a>
+              </div>
+              <p>causticColor1 = causticColor2; // when not debugging, these should be the same</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> critColor1 = <span class="hljs-string">"orangeRed"</span>;
+<span class="hljs-keyword">var</span> critColor2 = <span class="hljs-string">"crimson"</span>;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-16">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-16">&#182;</a>
+              </div>
+              <p>critColor1 = critColor2; // when not debugging, these should be the same</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> causticPointSizeX = <span class="hljs-number">2</span>;
+<span class="hljs-keyword">var</span> causticPointSizeY = <span class="hljs-number">2</span>;
+<span class="hljs-keyword">var</span> critPointSizeX = <span class="hljs-number">2</span>;
+<span class="hljs-keyword">var</span> critPointSizeY = <span class="hljs-number">2</span>;
+
+<span class="hljs-keyword">var</span> binaryLensedImagePointSizeX = <span class="hljs-number">2</span>;
+<span class="hljs-keyword">var</span> binaryLensedImagePointSizeY = <span class="hljs-number">2</span>;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-17">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-17">&#182;</a>
+              </div>
+              <p>var binaryLensedImageOutlineColors = [“aqua”, “teal”, “orange”, “black”, “pink”];
+var binaryLensedImageFillColors = [“pink”, “aqua”, “teal”, “orange”, “black”];</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> binaryLensedImageOutlineColors = [<span class="hljs-string">"black"</span>, <span class="hljs-string">"black"</span>, <span class="hljs-string">"black"</span>, <span class="hljs-string">"black"</span>, <span class="hljs-string">"black"</span>];
+<span class="hljs-keyword">var</span> binaryLensedImageFillColors = [<span class="hljs-string">"orange"</span>, <span class="hljs-string">"orange"</span>, <span class="hljs-string">"orange"</span>, <span class="hljs-string">"orange"</span>, <span class="hljs-string">"orange"</span>];</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-18">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-18">&#182;</a>
+              </div>
+              <p>base variables (tick labels)</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> tickLabelFont = <span class="hljs-string">"8pt Arial"</span>;
+<span class="hljs-keyword">var</span> tickLabelColor = <span class="hljs-string">"black"</span>;
+<span class="hljs-keyword">var</span> tickLabelAlign = <span class="hljs-string">"center"</span>;
+<span class="hljs-keyword">var</span> tickLabelBaseline = <span class="hljs-string">"middle"</span>;
+<span class="hljs-keyword">var</span> tickLabelSpacing = <span class="hljs-number">7</span>; <span class="hljs-comment">// spacking between tick label and end of trailing gridline</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-19">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-19">&#182;</a>
+              </div>
+              <p>base variables (axis labels)</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> xDayLabel = <span class="hljs-string">"time (days)"</span>;
+<span class="hljs-keyword">var</span> xLabel = <span class="hljs-built_in">String</span>.fromCharCode(<span class="hljs-number">952</span>) + <span class="hljs-string">"x (mas)"</span>; <span class="hljs-comment">// thetaX</span>
+<span class="hljs-keyword">var</span> yLabel = <span class="hljs-built_in">String</span>.fromCharCode(<span class="hljs-number">952</span>) + <span class="hljs-string">"y (mas)"</span>; <span class="hljs-comment">// thetaY</span>
+<span class="hljs-keyword">var</span> axisLabelFont = <span class="hljs-string">"10pt Arial"</span>;
+<span class="hljs-keyword">var</span> axisLabelColor = <span class="hljs-string">"black"</span>;
+<span class="hljs-keyword">var</span> axisLabelAlign = <span class="hljs-string">"center"</span>;
+<span class="hljs-keyword">var</span> axisLabelBaseline = <span class="hljs-string">"middle"</span>;
+<span class="hljs-keyword">var</span> axisLabelSpacing = <span class="hljs-number">27</span>;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-20">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-20">&#182;</a>
+              </div>
+              <p>derived variables (borders)</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> picRightBorder;
+<span class="hljs-keyword">var</span> picBottomBorder;
+<span class="hljs-keyword">var</span> centerX;
+<span class="hljs-keyword">var</span> centerY;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-21">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-21">&#182;</a>
+              </div>
+              <p>derived variables (trails)</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> picLeftTrailingBorder;
+<span class="hljs-keyword">var</span> picRightTrailingBorder;
+<span class="hljs-keyword">var</span> picTopTrailingBorder;
+<span class="hljs-keyword">var</span> picBottomTrailingBorder;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-22">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-22">&#182;</a>
+              </div>
+              <p>derived variables (range/scale)</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> xDayPixelScale;
+<span class="hljs-keyword">var</span> xPixelScale;
+<span class="hljs-keyword">var</span> yPixelScale;
+<span class="hljs-keyword">var</span> xAxisFinalDay;
+<span class="hljs-keyword">var</span> yAxisFinalThetaY;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-23">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-23">&#182;</a>
+              </div>
+              <p>derived variables (gridlines)</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> xGridInitial;
+<span class="hljs-keyword">var</span> yGridInitial;
+<span class="hljs-keyword">var</span> xGridFinal;
+<span class="hljs-keyword">var</span> yGridFinal;
+<span class="hljs-keyword">var</span> xGridStep;
+<span class="hljs-keyword">var</span> yGridStep;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-24">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-24">&#182;</a>
+              </div>
+              <p>derived variable (source/lens/ring)</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> sourcePos; <span class="hljs-comment">// x value: time (days); y value: thetaY</span>
+<span class="hljs-keyword">var</span> sourcePixelPos; <span class="hljs-comment">// pixel x and y values</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-25">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-25">&#182;</a>
+              </div>
+              <p>var lens1pixelPos;
+var lens2pixelPos;</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> ringRadius = {<span class="hljs-attr">x</span>: <span class="hljs-literal">undefined</span>, <span class="hljs-attr">y</span>: <span class="hljs-literal">undefined</span>}
+<span class="hljs-keyword">var</span> lensedImages;
+<span class="hljs-keyword">var</span> sourceOutline;
+<span class="hljs-keyword">var</span> lensedImageOutlines;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-26">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-26">&#182;</a>
+              </div>
+              <p>caustic and crit</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> caustic = <span class="hljs-literal">null</span>;
+<span class="hljs-keyword">var</span> crit = <span class="hljs-literal">null</span>;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-27">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-27">&#182;</a>
+              </div>
+              <p>positions of lensed images as function of time/source position</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> lensedImagesPos;
+<span class="hljs-keyword">var</span> lensedImagesPixelPos;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-28">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-28">&#182;</a>
+              </div>
+              <p>sort of derived variables? but not really? (canvas/context)</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> mainCanvas = <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">"lensPlaneCanvas"</span>);
+<span class="hljs-keyword">var</span> mainContext = mainCanvas.getContext(<span class="hljs-string">"2d"</span>);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-29">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-29">&#182;</a>
+              </div>
+              <p>off-screen canvas for critical/caustic curves</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> curveCanvas = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">"canvas"</span>);
+curveCanvas.width = mainCanvas.width;
+curveCanvas.height = mainCanvas.width;
+<span class="hljs-keyword">var</span> curveContext = curveCanvas.getContext(<span class="hljs-string">"2d"</span>);
+
+<span class="hljs-keyword">var</span> thetaXreadout = <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">"thetaXreadout"</span>); <span class="hljs-comment">// readout of current source thetaX position</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-30">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-30">&#182;</a>
+              </div>
+              <p>mainly for debugging, but may keep</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> sourceRadiusNormalizedReadout = <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">"sourceRadiusNormalizedReadout"</span>);
+<span class="hljs-keyword">var</span> imageShapeCheckbox = <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">"imageShapeCheckbox"</span>);
+<span class="hljs-keyword">var</span> sourceRadiusSlider = <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">"sourceRadiusSlider"</span>);
+<span class="hljs-keyword">var</span> sourceRadiusReadout = <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">"sourceRadiusReadout"</span>);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-31">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-31">&#182;</a>
+              </div>
+              <p>if on, display shapes for the lensed images, not just points;
+toggled by checkbox</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> displayImageShapeFlag = <span class="hljs-literal">false</span>;
+
+<span class="hljs-keyword">var</span> numPointsDefault = <span class="hljs-number">360</span>; <span class="hljs-comment">// number of points into which source outline is divided</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-32">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-32">&#182;</a>
+              </div>
+              <p>i.e. a value of 8 would divide the outline into 8
+evenly spaced points</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+<span class="hljs-keyword">var</span> numExtraPointsDefault = <span class="hljs-number">360</span>;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-33">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-33">&#182;</a>
+              </div>
+              <p>debug flags</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> animationFlag = <span class="hljs-literal">true</span>;
+<span class="hljs-keyword">var</span> centerLayoutFlag = <span class="hljs-literal">false</span>;
+<span class="hljs-keyword">var</span> drawGridFlag = <span class="hljs-literal">true</span>;
+<span class="hljs-keyword">var</span> drawFullLensedImagesFlag = <span class="hljs-literal">true</span>; <span class="hljs-comment">//<span class="hljs-doctag">NOTE:</span> Hammers performance currently</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-34">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-34">&#182;</a>
+              </div>
+              <p>if on, grid lines/ticks for that axis are created in steps starting from 0,
+rather than starting from the lowest x-axis value or y-axis value</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> centerXgridOnZeroFlag = <span class="hljs-literal">true</span>;
+<span class="hljs-keyword">var</span> centerYgridOnZeroFlag = <span class="hljs-literal">true</span>;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-35">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-35">&#182;</a>
+              </div>
+              <p>need on to work in Firefox;
+replaces context.ellipse with context.arc since firefox doesn’t support ellipse;
+however, y-scaling of ring won’t be correct if x/y aspect ratio is not square;</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> firefoxCompatibilityFlag = <span class="hljs-literal">true</span>;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-36">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-36">&#182;</a>
+              </div>
+              <p>add more points to outline if source is close to lens</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> lensProximityCheckFlag = <span class="hljs-literal">true</span>;
+<span class="hljs-keyword">var</span> clippingImageFlag = <span class="hljs-literal">false</span>;
+<span class="hljs-keyword">var</span> binaryFlag = <span class="hljs-literal">true</span>;
+<span class="hljs-keyword">var</span> separateBinaryRingsFlag = <span class="hljs-literal">true</span>; <span class="hljs-comment">// desplay separate rings for each lens;</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-37">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-37">&#182;</a>
+              </div>
+              <p>for debugging/testing</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> causticCurveFlag = <span class="hljs-literal">true</span>; <span class="hljs-comment">// display caustic curve</span>
+<span class="hljs-keyword">var</span> critCurveFlag = <span class="hljs-literal">true</span>; <span class="hljs-comment">// display critical curve</span>
+
+<span class="hljs-keyword">var</span> updateOnSliderMovementFlag = eventModule.updateOnSliderMovementFlag;
+<span class="hljs-keyword">var</span> updateOnSliderReleaseFlag = eventModule.updateOnSliderReleaseFlag;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-38">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-38">&#182;</a>
+              </div>
+              <p>called from PSPL_microlensing_event.js (or whichever script holds the parameter
+values) after initializations and slider updates),
+because we NEED parameters initialized first to do drawing and scaling</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">init</span>(<span class="hljs-params">animation=animationFlag</span>) </span>{
+  initListeners();
+  updateScaleAndRangeValues();
+  initLenses();
+  initSourcePos(animation=animation);
+  initSourceRadius();
+  drawing.renderCurves();
+  redraw();
+
+  initialized = <span class="hljs-literal">true</span>;
+}
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">initListeners</span>(<span class="hljs-params">updateOnSliderMovement=updateOnSliderMovementFlag,
+                       updateOnSliderRelease=updateOnSliderReleaseFlag</span>) </span>{
+  imageShapeCheckbox.addEventListener(<span class="hljs-string">"change"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{ displayImageShapeFlag = imageShapeCheckbox.checked;
+                                                             redraw();
+                                                             <span class="hljs-built_in">console</span>.log(<span class="hljs-string">`displayImageShapeFlag: <span class="hljs-subst">${displayImageShapeFlag}</span>`</span>); }, <span class="hljs-literal">false</span>);
+  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">"(binary_lens_plane) updateOnSliderMovement: "</span> + updateOnSliderMovement);
+  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">"(binary_lens_plane) updateOnSliderRelease: "</span> + updateOnSliderRelease);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-39">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-39">&#182;</a>
+              </div>
+              <p>update plot when slider is moved</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+  <span class="hljs-keyword">if</span> (sourceRadiusSlider !== <span class="hljs-literal">null</span>) {
+    <span class="hljs-keyword">if</span> (updateOnSliderMovement === <span class="hljs-literal">true</span>) {
+      sourceRadiusSlider.addEventListener(<span class="hljs-string">"input"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{ updateSourceRadius(); }, <span class="hljs-literal">false</span>);
+    }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-40">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-40">&#182;</a>
+              </div>
+              <p>update plot when slider is released</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+    <span class="hljs-keyword">if</span> (updateOnSliderRelease === <span class="hljs-literal">true</span>) {
+      sourceRadiusSlider.addEventListener(<span class="hljs-string">"change"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{ updateSourceRadius(); }, <span class="hljs-literal">false</span>);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-41">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-41">&#182;</a>
+              </div>
+              <p>if plot updates only upon slider release,
+update slider readout alone while slider is being moved,
+without recalculating/updating other sliders (until after current slider is released)</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">if</span> (updateOnSliderMovement === <span class="hljs-literal">false</span>) {
+        sourceRadiusSlider.addEventListener(<span class="hljs-string">"input"</span>,
+                                            <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{ eventModule.updateSliderReadout(sourceRadiusSlider,
+                                                                                        sourceRadiusReadout,
+                                                                                        <span class="hljs-string">"sourceRadius"</span>); }, <span class="hljs-literal">false</span>);
+      }
+
+    }
+  }
+}
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">initLenses</span>(<span class="hljs-params">isBinary=binaryFlag</span>) </span>{
+  <span class="hljs-keyword">var</span> ring1radius_mas = eventModule.calculateThetaE(get_mas=<span class="hljs-literal">true</span>, useBinaryMass=<span class="hljs-literal">false</span>, lensToUse=<span class="hljs-number">1</span>);
+  <span class="hljs-keyword">var</span> ring1radiusX = ring1radius_mas * xPixelScale;
+  <span class="hljs-keyword">var</span> ring1radiusY = ring1radius_mas * yPixelScale;
+
+  lens1 = <span class="hljs-keyword">new</span> Lens(<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, lensRadius, lensColor,
+                   lensOutlineWidth, lensOutlineColor,
+                   ring1radiusX, ring1radiusY,
+                   ringColor, ringWidth, dashedRingLength, dashedRingSpacing);
+
+  <span class="hljs-keyword">if</span> (isBinary === <span class="hljs-literal">true</span>) {
+    <span class="hljs-keyword">var</span> ring2radius_mas = eventModule.calculateThetaE(get_mas=<span class="hljs-literal">true</span>, useBinaryMass=<span class="hljs-literal">false</span>, lensToUse=<span class="hljs-number">2</span>);
+    <span class="hljs-keyword">var</span> ring2radiusX = ring2radius_mas * xPixelScale;
+    <span class="hljs-keyword">var</span> ring2radiusY = ring2radius_mas * yPixelScale;
+
+    <span class="hljs-keyword">var</span> lensSep = eventModule.lensSep;
+    lens1.updatePos(-lensSep/<span class="hljs-number">2</span>, <span class="hljs-number">0</span>);
+    lens2 = <span class="hljs-keyword">new</span> Lens(lensSep/<span class="hljs-number">2</span>, <span class="hljs-number">0</span>, lensRadius, lensColor,
+                     lensOutlineWidth, lensOutlineColor,
+                     ring2radiusX, ring2radiusY,
+                     ringColor, ringWidth, dashedRingLength, dashedRingSpacing);
+  }
+}
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">initSourceRadius</span>(<span class="hljs-params"></span>) </span>{
+  sourceRadius = <span class="hljs-number">4</span>/xPixelScale; <span class="hljs-comment">// source radius in mas</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-42">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-42">&#182;</a>
+              </div>
+              <p>sourceRadius = 0.0133; // mas
+sourceRadius = 0.0636; // mas</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+  lensedImageRadius = sourceRadius*xPixelScale;
+
+  <span class="hljs-keyword">if</span> (sourceRadiusSlider !== <span class="hljs-literal">null</span>)
+    updateSourceRadiusSlider();
+}
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">updateSourceRadiusSlider</span>(<span class="hljs-params"></span>) </span>{
+  sourceRadiusSlider.value = sourceRadius; <span class="hljs-comment">// source radius in mas</span>
+  eventModule.updateSliderReadout(sourceRadiusSlider, sourceRadiusReadout, <span class="hljs-string">"sourceRadius"</span>);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-43">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-43">&#182;</a>
+              </div>
+              <p>sourceRadiusReadout.innerHTML = Number(sourceRadiusSlider.value).toFixed(4);</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>}
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">updateSourceRadius</span>(<span class="hljs-params"></span>) </span>{
+  sourceRadius = sourceRadiusSlider.value; <span class="hljs-comment">// source radisu in mas</span>
+  lensedImageRadius = sourceRadius * xPixelScale;
+  updateSourceRadiusSlider();
+  eventModule.updateCurveData();
+  eventModule.redrawCanvases();</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-44">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-44">&#182;</a>
+              </div>
+              <p>eventModule.plotLightcurve();
+redraw();</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>}
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">initSourcePos</span>(<span class="hljs-params">animation=animationFlag</span>) </span>{
+  <span class="hljs-keyword">var</span> sourcePosY = eventModule.thetaY;
+  sourcePos = {<span class="hljs-attr">x</span>: getThetaX(eventModule.xAxisInitialDay), <span class="hljs-attr">y</span>: sourcePosY};
+
+  <span class="hljs-keyword">if</span> (animation === <span class="hljs-literal">false</span>) {
+    sourcePos.x = xAxisFinalThetaX;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-45">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-45">&#182;</a>
+              </div>
+              <p>sourcePos.x = xAxisInitialThetaX;</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  }
+}
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">redraw</span>(<span class="hljs-params">animation=animationFlag</span>) </span>{
+  updateDrawingValues(animation=animation);
+  drawing.drawPic();
+}
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">updateScaleAndRangeValues</span>(<span class="hljs-params"></span>) </span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-46">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-46">&#182;</a>
+              </div>
+              <p>borders</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  picRightBorder = picLeftBorder + picWidth; <span class="hljs-comment">// right border of picture x-pixel value, NOT including any trailing gridlines</span>
+  picBottomBorder = picTopBorder + picHeight; <span class="hljs-comment">// bottom border of picture y-pixel value, NOT including any trailing gridlines</span>
+  centerX = picWidth/<span class="hljs-number">2</span> + picLeftBorder;
+  centerY = picHeight/<span class="hljs-number">2</span> + picTopBorder;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-47">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-47">&#182;</a>
+              </div>
+              <p>trails</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  picLeftTrailingBorder = picLeftBorder - picLeftTrail; <span class="hljs-comment">// left border of picture x-pixel value, INCLUDING any trailing gridlines</span>
+  picRightTrailingBorder = picRightBorder + picRightTrail; <span class="hljs-comment">// right border of picture x-pixel value, INCLUDING any trailing gridlines</span>
+  picTopTrailingBorder = picTopBorder - picTopTrail; <span class="hljs-comment">// top border of picture y-pixel value, INCLUDING any trailing gridlines</span>
+  picBottomTrailingBorder = picBottomBorder + picBottomTrail; <span class="hljs-comment">// bottom border of picture y-pixel value, INCLUDING any trailing gridlines</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-48">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-48">&#182;</a>
+              </div>
+              <p>range/scale</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  xDayPixelScale = picWidth/dayWidth;
+  xPixelScale = picWidth/thetaXwidth;
+  yPixelScale = picHeight/thetaYheight;
+
+  xAxisFinalDay = xAxisInitialDay + dayWidth;
+  xAxisFinalThetaX = xAxisInitialThetaX + thetaXwidth;
+  yAxisFinalThetaY = yAxisInitialThetaY + thetaYheight;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-49">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-49">&#182;</a>
+              </div>
+              <p>grid values</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  updateGridRange(xGridStepDefault, yGridStepDefault); <span class="hljs-comment">// initialize gridline vars</span>
+}
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">updateDrawingValues</span>(<span class="hljs-params">animation=animationFlag</span>) </span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-50">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-50">&#182;</a>
+              </div>
+              <p>if (animation === true)
+  sourcePos.x = getThetaX(eventModule.xAxisInitialDay);</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  sourcePos.y = getThetaYpathValue(sourcePos.x); <span class="hljs-comment">// update source thetaY</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-51">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-51">&#182;</a>
+              </div>
+              <p>makes sure “0.0000” is displayed instead of “-0.0000” if rounding error
+occurs</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">if</span> (thetaXreadout !== <span class="hljs-literal">null</span>) {
+    <span class="hljs-keyword">var</span> newThetaXreadout = <span class="hljs-built_in">Number</span>(sourcePos.x).toFixed(<span class="hljs-number">4</span>)
+    <span class="hljs-keyword">if</span> (<span class="hljs-built_in">Number</span>(newThetaXreadout) === <span class="hljs-number">-0</span>) {
+      newThetaXreadout = <span class="hljs-built_in">Number</span>(<span class="hljs-number">0</span>).toFixed(<span class="hljs-number">4</span>);
+    }
+    thetaXreadout.innerHTML = newThetaXreadout; <span class="hljs-comment">// update source thetaX readout</span>
+  }
+
+  <span class="hljs-keyword">if</span> (sourceRadiusNormalizedReadout !== <span class="hljs-literal">null</span>) {
+    <span class="hljs-keyword">var</span> newSourceRadiusNormalizedReadout = <span class="hljs-built_in">Number</span>(sourceRadius / eventModule.thetaE_mas).toFixed(<span class="hljs-number">4</span>);
+    <span class="hljs-keyword">if</span> (<span class="hljs-built_in">Number</span>(newSourceRadiusNormalizedReadout) === <span class="hljs-number">-0</span>) {
+      newSourceRadiusNormalizedReadout = <span class="hljs-built_in">Number</span>(<span class="hljs-number">0</span>).toFixed(<span class="hljs-number">4</span>);
+    }
+    sourceRadiusNormalizedReadout.innerHTML = newSourceRadiusNormalizedReadout;
+  }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-52">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-52">&#182;</a>
+              </div>
+              <p>convert position to pixel units</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  sourcePixelPos = {<span class="hljs-attr">x</span>: thetaXtoPixel(sourcePos.x), <span class="hljs-attr">y</span>: thetaYtoPixel(sourcePos.y)};</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-53">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-53">&#182;</a>
+              </div>
+              <p>ringRadius.x = eventModule.thetaE_mas <em> xPixelScale;
+ringRadius.y = eventModule.thetaE_mas </em> yPixelScale;</p>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-54">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-54">&#182;</a>
+              </div>
+              <p>lens pixel position
+lens1.pixelPos = {x:thetaXtoPixel(lens1.pos.x), y: thetaYtoPixel(lens1.pos.y)};</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  initLenses();</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-55">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-55">&#182;</a>
+              </div>
+              <p>lensed image positions</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  lensedImages = getLensedImages(sourcePos);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-56">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-56">&#182;</a>
+              </div>
+              <p>lensed image outlines
+NOTE: This hammers the performance signifcantly right now</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">if</span> (drawFullLensedImagesFlag === <span class="hljs-literal">true</span> &amp;&amp; eventModule.finiteSourceFlag === <span class="hljs-literal">true</span>) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-57">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-57">&#182;</a>
+              </div>
+              <p>sourceOutline = getCircleOutlineWithRecursion(radius=sourceRadius, thetaPos=sourcePos);</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    sourceOutline = getCircleOutline(radius=sourceRadius, thetaPos=sourcePos);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-58">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-58">&#182;</a>
+              </div>
+              <p>setCircleOutline(radius=sourceRadius, thetaPos=sourcePos);</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    lensedImageOutlines = getLensedImageOutlines(sourceOutline);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-59">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-59">&#182;</a>
+              </div>
+              <p>if (lensedImageOutlines.plus.length === sourceOutline.length) {
+  console.log(<code>lensedImageOutlines plus length !== sourceOutline length: ${lensedImageOutlines.plus.length} !== ${sourceOutline.length}</code>);
+  for (i in lensedImageOutlines.plus) {
+    console.log(<code>lensedImageOutlines plus: (${lensedImageOutlines.plus[i].pos.x}, ${lensedImageOutlines.plus[i].pos.y})</code>);
+  }
+}</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  }
+}
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">thetaXtoPixel</span>(<span class="hljs-params">xPicThetaX</span>) </span>{
+  <span class="hljs-keyword">var</span> xPixel = (xPicThetaX - xAxisInitialThetaX) * xPixelScale + picLeftBorder;
+  <span class="hljs-keyword">return</span> xPixel;
+}
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">xDayToPixel</span>(<span class="hljs-params">xPicDay</span>) </span>{
+  <span class="hljs-keyword">var</span> xPixel = (xPicDay - xAxisInitialDay) * xDayPixelScale + picLeftBorder;
+  <span class="hljs-keyword">return</span> xPixel;
+}
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">thetaYtoPixel</span>(<span class="hljs-params">yPicThetaY</span>) </span>{
+  <span class="hljs-keyword">var</span> yPixel = picBottomBorder - (yPicThetaY - yAxisInitialThetaY) * yPixelScale
+  <span class="hljs-keyword">return</span> yPixel;
+}
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getThetaX</span>(<span class="hljs-params">t</span>) </span>{
+  <span class="hljs-keyword">var</span> mu = eventModule.mu;
+  <span class="hljs-keyword">var</span> t0 = eventModule.t0;
+  <span class="hljs-keyword">var</span> yearToDay = <span class="hljs-number">365.25</span>; <span class="hljs-comment">// day/year; const</span>
+  <span class="hljs-keyword">var</span> eqMu = mu / yearToDay; <span class="hljs-comment">// convert mu to milliarcseconds/day</span>
+  <span class="hljs-keyword">var</span> thetaX = eqMu * (t - t0);
+  <span class="hljs-keyword">return</span> thetaX;
+}
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getThetaYpathValue</span>(<span class="hljs-params">thetaX</span>) </span>{
+  <span class="hljs-keyword">var</span> incline_radians = eventModule.incline * <span class="hljs-built_in">Math</span>.PI/<span class="hljs-number">180</span>;
+  <span class="hljs-keyword">var</span> slope = <span class="hljs-built_in">Math</span>.tan(incline_radians);
+  <span class="hljs-keyword">var</span> thetaYintercept = eventModule.thetaY; <span class="hljs-comment">// mas</span>
+
+  <span class="hljs-keyword">var</span> thetaYvalue = slope*thetaX + thetaYintercept;
+  <span class="hljs-keyword">return</span> thetaYvalue;
+}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-60">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-60">&#182;</a>
+              </div>
+              <p>NOTE: Hacky – fix</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">almostEquals</span>(<span class="hljs-params">a, b, epsilon=<span class="hljs-number">1e-12</span></span>) </span>{
+  <span class="hljs-keyword">return</span> (<span class="hljs-built_in">Math</span>.abs(a - b) &lt; epsilon);
+}
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getCircleOutline</span>(<span class="hljs-params">radius=sourceRadius, thetaPos=sourcePos,
+                          numPoints=numPointsDefault, initialAngle=<span class="hljs-number">0</span>, finalAngle=<span class="hljs-number">2</span>*Math.PI </span>) </span>{
+  <span class="hljs-keyword">var</span> outline = [];
+  <span class="hljs-keyword">var</span> deltaAngle = (finalAngle - initialAngle)/numPoints;
+
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> angle=initialAngle; (angle&lt;finalAngle &amp;&amp; almostEquals(angle, finalAngle) === <span class="hljs-literal">false</span>); angle+=deltaAngle) {
+    <span class="hljs-keyword">var</span> xOffset = radius * <span class="hljs-built_in">Math</span>.cos(angle);
+    <span class="hljs-keyword">var</span> yOffset = radius * <span class="hljs-built_in">Math</span>.sin(angle);
+    <span class="hljs-keyword">var</span> point = {<span class="hljs-attr">x</span>: thetaPos.x + xOffset, <span class="hljs-attr">y</span>: thetaPos.y + yOffset};
+
+    <span class="hljs-keyword">var</span> deltaX = point.x - lens1.pos.x;
+    <span class="hljs-keyword">var</span> deltaY = point.y - lens1.pos.y;
+    <span class="hljs-keyword">var</span> distR = <span class="hljs-built_in">Math</span>.sqrt(deltaX*deltaX + deltaY*deltaY);
+    <span class="hljs-keyword">var</span> nextAngle = angle+deltaAngle;
+
+    outline.push(point);
+    <span class="hljs-keyword">if</span> (lensProximityCheckFlag === <span class="hljs-literal">true</span>)
+      addExtraPoints(outline, radius, thetaPos, angle, nextAngle, distR)
+  }
+  <span class="hljs-keyword">return</span> outline;
+}
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">addExtraPoints</span>(<span class="hljs-params">outline, radius, thetaPos, initialAngle, finalAngle, distR, numExtraPoints=numExtraPointsDefault</span>) </span>{
+  <span class="hljs-keyword">var</span> deltaAngle = (finalAngle - initialAngle)/numExtraPoints;
+  <span class="hljs-keyword">if</span> (almostEquals(distR, <span class="hljs-number">0</span>, epsilon=<span class="hljs-number">1</span>/xPixelScale) === <span class="hljs-literal">true</span>) {
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> angle=initialAngle+deltaAngle; (angle&lt;finalAngle &amp;&amp; almostEquals(angle, finalAngle) === <span class="hljs-literal">false</span>); angle+=deltaAngle) {
+      <span class="hljs-keyword">var</span> xOffset = radius * <span class="hljs-built_in">Math</span>.cos(angle);
+      <span class="hljs-keyword">var</span> yOffset = radius * <span class="hljs-built_in">Math</span>.sin(angle);
+      <span class="hljs-keyword">var</span> point = {<span class="hljs-attr">x</span>: thetaPos.x + xOffset, <span class="hljs-attr">y</span>: thetaPos.y + yOffset};
+      outline.push(point);
+    }
+  }
+}
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getCircleOutlineWithRecursion</span>(<span class="hljs-params">radius=sourceRadius, thetaPos=sourcePos,
+                          numPoints=numPointsDefault,
+                          numExtraPoints=numExtraPointsDefault,
+                          initialAngle, finalAngle, recurring=false</span>) </span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-61">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-61">&#182;</a>
+              </div>
+              <p>get points (in mas units) for outline of a circle, given its pixel radius
+and theta position; defaults to getting source outline</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+  <span class="hljs-keyword">if</span> (initialAngle === <span class="hljs-literal">undefined</span>)
+    initialAngle = <span class="hljs-number">0</span>;
+
+  <span class="hljs-keyword">if</span> (finalAngle === <span class="hljs-literal">undefined</span>)
+    finalAngle = <span class="hljs-number">2</span>*<span class="hljs-built_in">Math</span>.PI;
+
+  <span class="hljs-keyword">if</span> (recurring === <span class="hljs-literal">undefined</span>)
+    recurring = <span class="hljs-literal">false</span>;
+
+  <span class="hljs-keyword">var</span> outline = [];
+  <span class="hljs-keyword">var</span> deltaAngle = (finalAngle - initialAngle)/numPoints;
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> angle=initialAngle; (angle&lt;finalAngle &amp;&amp; almostEquals(angle, finalAngle) === <span class="hljs-literal">false</span>); angle += deltaAngle) {
+    <span class="hljs-keyword">var</span> xOffset = radius * <span class="hljs-built_in">Math</span>.cos(angle);
+    <span class="hljs-keyword">var</span> yOffset = radius * <span class="hljs-built_in">Math</span>.sin(angle);
+
+    <span class="hljs-keyword">var</span> point = {<span class="hljs-attr">x</span>: thetaPos.x + xOffset, <span class="hljs-attr">y</span>: thetaPos.y + yOffset}
+
+    <span class="hljs-keyword">var</span> deltaX = point.x - lens1.pos.x;
+    <span class="hljs-keyword">var</span> deltaY = point.y - lens1.pos.y;
+    <span class="hljs-keyword">var</span> distR = <span class="hljs-built_in">Math</span>.sqrt(deltaX*deltaX + deltaY*deltaY);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-62">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-62">&#182;</a>
+              </div>
+              <p>how close outline point must be in pixels to lens for extra points to be added
+var pixelProximity = sourceRadius*xPixelScale/4;</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">var</span> pixelProximity = sourceRadius / <span class="hljs-number">0.0133</span>;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-63">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-63">&#182;</a>
+              </div>
+              <p>if (pixelProximity &gt; 30) // cap at 10 pixels
+pixelProximity = 30;</p>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-64">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-64">&#182;</a>
+              </div>
+              <p>output pixel proximity ONCE whenever value changes</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> <span class="hljs-keyword">this</span>.pixelProximity !== <span class="hljs-string">"undefined"</span> &amp;&amp; pixelProximity !== <span class="hljs-keyword">this</span>.pixelProximity) {
+      <span class="hljs-built_in">console</span>.log(<span class="hljs-string">`new pixelProximity: <span class="hljs-subst">${pixelProximity}</span>`</span>);
+    }
+    <span class="hljs-keyword">this</span>.pixelProximity = pixelProximity;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-65">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-65">&#182;</a>
+              </div>
+              <p>if (almostEquals(distR, 0, epsilon=10/xPixelScale) === true &amp;&amp; recurring === false &amp;&amp; lensProximityCheckFlag===true) {</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">if</span> (almostEquals(distR, <span class="hljs-number">0</span>, epsilon=pixelProximity/xPixelScale) === <span class="hljs-literal">true</span> &amp;&amp; recurring === <span class="hljs-literal">false</span> &amp;&amp; lensProximityCheckFlag===<span class="hljs-literal">true</span>) {
+      <span class="hljs-keyword">var</span> nextAngle = angle + deltaAngle;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-66">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-66">&#182;</a>
+              </div>
+              <p>var halfwayAngle = (angle + nextAngle)/2;
+var quarterAngle = (angle + halfwayAngle)/2;
+var threeQuartersRadian = (halfwayAngle + nextAngle)/2;
+var subOutline = getCircleOutline(radius, thetaPos, numPoints, quarterRadian, threeQuartersRadian, true);</p>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-67">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-67">&#182;</a>
+              </div>
+              <p>var numExtraPoints2 = (nextAngle - angle)/(2*Math.PI/numExtraPoints);
+console.log(<code>numExtraPoints2: ${numExtraPoints2}</code>);</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">var</span> subOutline = getCircleOutline(radius, thetaPos, numExtraPoints, numExtraPoints, angle, nextAngle, <span class="hljs-literal">true</span>);
+      outline = outline.concat(subOutline);
+    }
+    <span class="hljs-keyword">else</span> { <span class="hljs-comment">// not close enough to center, or on a recursion iteration, or lens proximity check flag is off</span>
+      outline.push(point);
+    }
+  }
+
+  <span class="hljs-keyword">return</span> outline;
+}
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getLensedImages</span>(<span class="hljs-params">thetaPos=sourcePos</span>) </span>{
+  <span class="hljs-keyword">var</span> thetaE_mas = eventModule.thetaE_mas;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-68">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-68">&#182;</a>
+              </div>
+              <p>var u0 = eventModule.u0;</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+  <span class="hljs-keyword">var</span> images = {<span class="hljs-attr">plus</span>: {<span class="hljs-attr">pos</span>: <span class="hljs-literal">undefined</span>, <span class="hljs-attr">pixelPos</span>: <span class="hljs-literal">undefined</span>},
+                <span class="hljs-attr">minus</span>: {<span class="hljs-attr">pos</span>: <span class="hljs-literal">undefined</span>, <span class="hljs-attr">pixelPos</span>: <span class="hljs-literal">undefined</span>}};
+
+  <span class="hljs-keyword">var</span> thetaR = <span class="hljs-built_in">Math</span>.sqrt(thetaPos.x*thetaPos.x + thetaPos.y*thetaPos.y);
+  <span class="hljs-keyword">var</span> u = thetaR / thetaE_mas;
+  <span class="hljs-keyword">var</span> plusLensedImageR = ( ( u + <span class="hljs-built_in">Math</span>.sqrt(u*u + <span class="hljs-number">4</span>) ) / <span class="hljs-number">2</span> ) * thetaE_mas;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-69">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-69">&#182;</a>
+              </div>
+              <p>var minusLensedImageR = Math.abs( ( u - Math.sqrt(u<em>u + 4) ) / 2 ) </em> thetaE_mas;</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">var</span> minusLensedImageR = <span class="hljs-number">1</span>/plusLensedImageR * thetaE_mas*thetaE_mas;
+
+
+  <span class="hljs-keyword">if</span> (thetaPos.y &gt;= <span class="hljs-number">0</span>)
+    <span class="hljs-keyword">var</span> thetaYsign = <span class="hljs-number">1</span>;
+  <span class="hljs-keyword">else</span> <span class="hljs-comment">// thetaY is negative</span>
+    <span class="hljs-keyword">var</span> thetaYsign = <span class="hljs-number">-1</span>;
+
+  <span class="hljs-keyword">var</span> phi = <span class="hljs-built_in">Math</span>.acos(thetaPos.x/thetaR) * thetaYsign;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-70">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-70">&#182;</a>
+              </div>
+              <p>var phi = Math.atan(thetaPos.y/thetaPos.x);</p>
+<p>// top-left or bottom-left quadrant
+if (thetaPos.x &lt; 0)
+  phi += Math.PI;</p>
+<p>// bottom-right quadrant
+if (thetaPos.x &gt; 0 &amp;&amp; thetaPos.y &lt; 0)
+  phi += 2*Math.PI;</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+
+  images.plus.pos = {<span class="hljs-attr">x</span>: lens1.pos.x + plusLensedImageR * <span class="hljs-built_in">Math</span>.cos(phi),
+                     <span class="hljs-attr">y</span>: lens1.pos.y + plusLensedImageR * <span class="hljs-built_in">Math</span>.sin(phi)};
+  images.minus.pos = {<span class="hljs-attr">x</span>: lens1.pos.x + minusLensedImageR * <span class="hljs-built_in">Math</span>.cos(<span class="hljs-built_in">Math</span>.PI + phi),
+                      <span class="hljs-attr">y</span>: lens1.pos.y + minusLensedImageR * <span class="hljs-built_in">Math</span>.sin(<span class="hljs-built_in">Math</span>.PI + phi)};
+
+  images.plus.pixelPos = {<span class="hljs-attr">x</span>: thetaXtoPixel(images.plus.pos.x),
+                          <span class="hljs-attr">y</span>: thetaYtoPixel(images.plus.pos.y)};
+  images.minus.pixelPos = {<span class="hljs-attr">x</span>: thetaXtoPixel(images.minus.pos.x),
+                           <span class="hljs-attr">y</span>: thetaYtoPixel(images.minus.pos.y)};
+
+
+  <span class="hljs-keyword">return</span> images;
+}
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getLensedImageOutlines</span>(<span class="hljs-params">sourceOutline</span>) </span>{
+  <span class="hljs-keyword">var</span> outlines = {<span class="hljs-attr">plus</span>: [], <span class="hljs-attr">minus</span>: []};
+
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> index=<span class="hljs-number">0</span>; index&lt;sourceOutline.length; index++) {
+    <span class="hljs-keyword">var</span> sourcePoint = sourceOutline[index];</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-71">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-71">&#182;</a>
+              </div>
+              <p>var sourcePoint = sourceOutline[0];</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">var</span> images = getLensedImages(sourcePoint);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-72">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-72">&#182;</a>
+              </div>
+              <p>images = {plus: {pos: {x:0, y:0}, pixelPos: {x:0, y:0}}, minus: {pos: {x:0, y:0}, pixelPos: {x:0, y:0}}};</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    outlines.plus.push(images.plus);
+    outlines.minus.push(images.minus);
+  }
+  <span class="hljs-keyword">return</span> outlines;
+}
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">updateGridRange</span>(<span class="hljs-params">xStep, yStep, centerXgridOnZero=centerXgridOnZeroFlag,
+                         centerYgridOnZero=centerYgridOnZeroFlag</span>) </span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-73">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-73">&#182;</a>
+              </div>
+              <p>update grid with new step values,
+and/or update grid for new initial/final axis values using</p>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-74">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-74">&#182;</a>
+              </div>
+              <p>if new step values are passed in, update grid step values;
+otherwise leave grid steps unchanged when updating grid</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">if</span> ( !(xStep === <span class="hljs-literal">undefined</span>) &amp;&amp; !(yStep === <span class="hljs-literal">undefined</span>)) {
+    xGridStep = xStep;
+    yGridStep = yStep;
+  }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-75">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-75">&#182;</a>
+              </div>
+              <p>update grid using current x/y axis initial and final values
+NOTE: hacky almostEquals solution to rounding error issue that isn’t very readable: fix</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">if</span> ((centerXgridOnZero === <span class="hljs-literal">true</span>) &amp;&amp; (xGridStep - <span class="hljs-built_in">Math</span>.abs(xAxisInitialThetaX % xGridStep) &gt; <span class="hljs-number">1e-10</span>))
+   xGridInitial = xAxisInitialThetaX - (xAxisInitialThetaX % xGridStep);
+  <span class="hljs-keyword">else</span>
+    xGridInitial = xAxisInitialThetaX;
+  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">`xGridInitial: <span class="hljs-subst">${xGridInitial}</span>`</span>);
+
+  xGridFinal = xAxisFinalThetaX;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-76">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-76">&#182;</a>
+              </div>
+              <p>NOTE: hacky almostEquals solution to rounding error issue that isn’t very readable: fix</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">if</span> ((centerYgridOnZero === <span class="hljs-literal">true</span>) &amp;&amp; (yGridStep - <span class="hljs-built_in">Math</span>.abs(yAxisInitialThetaY % yGridStep) &gt; <span class="hljs-number">1e-10</span>))
+    yGridInitial = yAxisInitialThetaY - (yAxisInitialThetaY % yGridStep);
+  <span class="hljs-keyword">else</span>
+    yGridInitial = yAxisInitialThetaY;
+
+  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">`y axis grid offset: <span class="hljs-subst">${yAxisInitialThetaY % yGridStep}</span>`</span>)
+  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">`yGridStep - Math.abs(yAxisInitialThetaY % yGridStep): <span class="hljs-subst">${yGridStep - <span class="hljs-built_in">Math</span>.abs(yAxisInitialThetaY % yGridStep) &lt; <span class="hljs-number">0.01</span>}</span>`</span>);
+  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">`yAxisInitialThetaY: <span class="hljs-subst">${yAxisInitialThetaY}</span>`</span>);
+  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">`yGridInitial: <span class="hljs-subst">${yGridInitial}</span>`</span>);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-77">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-77">&#182;</a>
+              </div>
+              <p>same rounding for final y grid line placement</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  yGridFinal = yAxisFinalThetaY;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-78">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-78">&#182;</a>
+              </div>
+              <p>console.log(Math.floor)
+console.log(“MathFloored xAxisInitialDay: “ + Math.floor(xAxisInitialDay));
+console.log(“xGridInitial: “ + xGridInitial);
+console.log(“xGridFinal: “ + xGridFinal);
+console.log(“MathFloored yAxisInitialThetaY: “ + Math.floor(yAxisInitialThetaY));
+console.log(“yGridInitial: “ + yGridInitial);
+console.log(“yGridFinal: “ + yGridFinal);</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>}
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">xDayToThetaX</span>(<span class="hljs-params"></span>) </span>{}
+<span class="hljs-keyword">var</span> drawing = (<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">isBinary=binaryFlag, context=mainContext, canvas=mainCanvas</span>) </span>{
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">clearPic</span>(<span class="hljs-params">context=mainContext</span>) </span>{
+    context.clearRect(picLeftBorder, picTopBorder, picWidth, picHeight);
+  }
+
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">drawBackgrounds</span>(<span class="hljs-params"></span>) </span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-79">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-79">&#182;</a>
+              </div>
+              <p>canvas background</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    context.fillStyle = backgroundColor;
+    context.fillRect(<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, canvas.width, canvas.height);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-80">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-80">&#182;</a>
+              </div>
+              <p>picture drawing area background</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    context.fillStyle = picBackgroundColor;
+    context.fillRect(picLeftBorder, picTopBorder, picWidth, picHeight);
+  }
+
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">toggleClippingRegion</span>(<span class="hljs-params">turnOn</span>) </span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-81">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-81">&#182;</a>
+              </div>
+              <p>set up clipping region as picture region, so that curve does not
+extend beyond picture region</p>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-82">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-82">&#182;</a>
+              </div>
+              <p>isOn flag tracks whether clipping was last turned on/off; off by default</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.isOn === <span class="hljs-literal">undefined</span>) {
+      <span class="hljs-keyword">this</span>.isOn = <span class="hljs-literal">false</span>;
+    }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-83">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-83">&#182;</a>
+              </div>
+              <p>toggle clipping if on/off command not specified</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">if</span> (turnOn !== <span class="hljs-literal">true</span> &amp;&amp; turnOn !==<span class="hljs-literal">false</span>) {
+      turnOn = !<span class="hljs-keyword">this</span>.isOn;
+    }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-84">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-84">&#182;</a>
+              </div>
+              <p>if told to turn clipping on, and clipping is not already on:</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">if</span> (turnOn === <span class="hljs-literal">true</span> &amp;&amp; <span class="hljs-keyword">this</span>.isOn === <span class="hljs-literal">false</span>) {
+      context.save();
+      context.beginPath();
+      context.rect(picLeftBorder, picTopBorder, picWidth, picHeight);
+      context.clip();
+      <span class="hljs-keyword">this</span>.isOn = <span class="hljs-literal">true</span>;
+    }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-85">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-85">&#182;</a>
+              </div>
+              <p>If told to turn clipping off, and clipping is not already off:</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (turnOn === <span class="hljs-literal">false</span> &amp;&amp; <span class="hljs-keyword">this</span>.isOn === <span class="hljs-literal">true</span>){
+      context.restore();
+      <span class="hljs-keyword">this</span>.isOn = <span class="hljs-literal">false</span>;
+    }
+  }
+
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">drawLens</span>(<span class="hljs-params">lens=lens1</span>) </span>{
+    context.beginPath();
+    context.arc(lens.pixelPos.x, lens.pixelPos.y, lens.radius, <span class="hljs-number">0</span>, <span class="hljs-number">2</span>*<span class="hljs-built_in">Math</span>.PI, <span class="hljs-literal">false</span>);
+    context.fillStyle = lens.color;
+    context.fill();
+    context.lineWidth = lens.outlineWidth;
+    context.strokeStyle = lens.outlineColor;
+    context.stroke();
+  }
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">drawRing</span>(<span class="hljs-params">lens=lens1, firefoxCompatibility=firefoxCompatibilityFlag</span>) </span>{
+    <span class="hljs-keyword">var</span> ring = lens.ring;
+    context.beginPath();</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-86">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-86">&#182;</a>
+              </div>
+              <p>ellipse not compatible with firefox</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">if</span> (firefoxCompatibility === <span class="hljs-literal">true</span>)
+      context.arc(lens.pixelPos.x, lens.pixelPos.y, ring.radius.x, <span class="hljs-number">0</span>, <span class="hljs-number">2</span>*<span class="hljs-built_in">Math</span>.PI, <span class="hljs-literal">false</span>);
+    <span class="hljs-keyword">else</span>
+      context.ellipse(lens.pixelPos.x, lens.pixelPos.y, ring.radius.x,
+                      ring.radius.y, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">2</span>*<span class="hljs-built_in">Math</span>.PI)
+    context.strokeStyle = ring.color;
+    context.lineWidth = ring.width;
+    context.setLineDash([ring.dashedLength, ring.dashedSpacing]); <span class="hljs-comment">// turn on dashed lines</span>
+    context.stroke();
+    context.setLineDash([]); <span class="hljs-comment">// turn off dashed-line drawing</span>
+  }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-87">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-87">&#182;</a>
+              </div>
+              <p>use this for when implementing animation;
+for now, should be at end of path, if we bother placing it</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">drawSource</span>(<span class="hljs-params">useOutline=false</span>) </span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-88">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-88">&#182;</a>
+              </div>
+              <p>set aesthetics</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    context.lineWidth = sourceOutlineWidth;
+    context.strokeStyle = sourceOutlineColor;
+    context.fillStyle = sourceColor;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-89">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-89">&#182;</a>
+              </div>
+              <p>draw source</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">if</span> (useOutline === <span class="hljs-literal">true</span>) {
+      <span class="hljs-keyword">for</span> (i <span class="hljs-keyword">in</span> sourceOutline) {
+        context.fillStyle = <span class="hljs-string">"SpringGreen"</span>;
+        context.beginPath();
+        context.arc(thetaXtoPixel(sourceOutline[i].x), thetaYtoPixel(sourceOutline[i].y), <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">2</span>*<span class="hljs-built_in">Math</span>.PI, <span class="hljs-literal">false</span>);
+        context.fill();
+      }
+    }
+    <span class="hljs-keyword">else</span> {
+      context.beginPath();
+      <span class="hljs-keyword">var</span> radiusPixels = sourceRadius * xPixelScale;
+      context.arc(sourcePixelPos.x, sourcePixelPos.y, radiusPixels, <span class="hljs-number">0</span>, <span class="hljs-number">2</span>*<span class="hljs-built_in">Math</span>.PI, <span class="hljs-literal">false</span>);
+      context.fill();
+      context.stroke();
+    }
+  }
+
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">drawSourcePath</span>(<span class="hljs-params"></span>) </span>{
+
+    <span class="hljs-keyword">var</span> thetaYleft = getThetaYpathValue(xAxisInitialThetaX);
+    <span class="hljs-keyword">var</span> thetaYright = getThetaYpathValue(xAxisFinalThetaX);
+    <span class="hljs-keyword">var</span> thetaYpixelLeft = thetaYtoPixel(thetaYleft);
+    <span class="hljs-keyword">var</span> thetaYpixelRight = thetaYtoPixel(thetaYright);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-90">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-90">&#182;</a>
+              </div>
+              <p>dashed line (path yet to be travelled)</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    context.beginPath();</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-91">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-91">&#182;</a>
+              </div>
+              <p>context.moveTo(picLeftBorder, sourcePixelPos.y);</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    context.moveTo(picLeftBorder, thetaYpixelLeft);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-92">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-92">&#182;</a>
+              </div>
+              <p>context.lineTo(picRightBorder, sourcePixelPos.y);</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    context.lineTo(picRightBorder, thetaYpixelRight);
+    context.setLineDash([dashedPathLength, dashedPathSpacing]); <span class="hljs-comment">// turn on dashed lines</span>
+    context.strokeStyle = dashedPathColor;
+    context.lineWidth = dashedPathWidth;
+    context.stroke();
+    context.setLineDash([]); <span class="hljs-comment">// turn off dashed lines</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-93">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-93">&#182;</a>
+              </div>
+              <p>solid line (path traveled so far)</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    context.beginPath();</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-94">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-94">&#182;</a>
+              </div>
+              <p>context.moveTo(picLeftBorder, sourcePixelPos.y);</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    context.moveTo(picLeftBorder, thetaYpixelLeft);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-95">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-95">&#182;</a>
+              </div>
+              <p>context.lineTo(sourcePixelPos.x, sourcePixelPos.y);</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    context.lineTo(sourcePixelPos.x, sourcePixelPos.y);
+    context.strokeStyle = pathColor;
+    context.lineWidth = pathWidth;
+    context.stroke();
+  }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-96">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-96">&#182;</a>
+              </div>
+              <p>for animation, pointless to implement before animation</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">drawUarrow</span>(<span class="hljs-params"></span>) </span>{}
+
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">drawBorder</span>(<span class="hljs-params"></span>) </span>{
+    context.beginPath();
+    context.strokeStyle = picBorderColor;
+    context.lineWidth = picBorderWidth;
+    context.strokeRect(picLeftBorder, picTopBorder, picWidth, picHeight);
+  }
+
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">drawAxes</span>(<span class="hljs-params"></span>) </span>{
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">drawAxisLines</span>(<span class="hljs-params"></span>) </span>{
+      context.beginPath();</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-97">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-97">&#182;</a>
+              </div>
+              <p>x axis
+the -axisWidth/2 makes the x and y axes fully connect
+at their intersection for all axis linewidths</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      context.moveTo(picLeftBorder - axisWidth/<span class="hljs-number">2</span>, picBottomBorder);
+      context.lineTo(picRightBorder + <span class="hljs-number">15</span>, picBottomBorder);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-98">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-98">&#182;</a>
+              </div>
+              <p>y axis;</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      context.moveTo(picLeftBorder, picBottomBorder);
+      context.lineTo(picLeftBorder, picTopBorder - <span class="hljs-number">15</span>);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-99">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-99">&#182;</a>
+              </div>
+              <p>x axis arrow
+NOTE: Doesn’t look right for linewidth &gt; 2</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      context.moveTo(picRightBorder + <span class="hljs-number">15</span>, picBottomBorder);
+      context.lineTo(picRightBorder + <span class="hljs-number">8</span>, picBottomBorder - <span class="hljs-number">5</span>);
+      context.moveTo(picRightBorder + <span class="hljs-number">15</span>, picBottomBorder);
+      context.lineTo(picRightBorder + <span class="hljs-number">8</span>, picBottomBorder + <span class="hljs-number">5</span>);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-100">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-100">&#182;</a>
+              </div>
+              <p>thetaT axis arrow
+NOTE: Doesn’t look right for linewidth &gt; 2</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      context.moveTo(picLeftBorder, picTopBorder - <span class="hljs-number">15</span>);
+      context.lineTo(picLeftBorder - <span class="hljs-number">5</span>, picTopBorder - <span class="hljs-number">8</span>);
+      context.moveTo(picLeftBorder, picTopBorder - <span class="hljs-number">15</span>);
+      context.lineTo(picLeftBorder + <span class="hljs-number">5</span>, picTopBorder - <span class="hljs-number">8</span>);
+
+      context.strokeStyle = axisColor;
+      context.lineWidth = axisWidth;
+      context.stroke();
+    }
+
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">drawAxisLabels</span>(<span class="hljs-params">centerLayout=centerLayoutFlag</span>) </span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-101">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-101">&#182;</a>
+              </div>
+              <p>x label</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      context.font = axisLabelFont;
+      context.textAlign = axisLabelAlign;
+      context.textBaseline = axisLabelBaseline;
+      context.fillStyle = axisLabelColor;
+
+      <span class="hljs-keyword">if</span> (centerLayout === <span class="hljs-literal">true</span>) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-102">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-102">&#182;</a>
+              </div>
+              <p>x label</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        context.fillText(xLabel, centerX, picBottomTrailingBorder + axisLabelSpacing)</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-103">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-103">&#182;</a>
+              </div>
+              <p>y label</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        context.save();
+        context.translate(picLeftTrailingBorder - <span class="hljs-number">25</span>, centerY);
+        context.rotate(-<span class="hljs-built_in">Math</span>.PI/<span class="hljs-number">2</span>);
+        context.textAlign = <span class="hljs-string">"center"</span>;
+        context.fillText(yLabel, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>);
+        context.restore();
+      }
+      <span class="hljs-keyword">else</span> {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-104">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-104">&#182;</a>
+              </div>
+              <p>x label</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        context.textAlign = <span class="hljs-string">"left"</span>;
+        context.fillText(xLabel, picRightTrailingBorder + <span class="hljs-number">20</span>, picBottomBorder);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-105">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-105">&#182;</a>
+              </div>
+              <p>y label</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        context.textBaseline = <span class="hljs-string">"bottom"</span>;
+        context.textAlign = <span class="hljs-string">"center"</span>;
+        context.fillText(yLabel, picLeftBorder, picTopTrailingBorder - <span class="hljs-number">20</span>);
+      }
+    }
+
+    drawAxisLines();
+    drawAxisLabels();
+  }
+
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">drawGridlinesAndTicks</span>(<span class="hljs-params">drawGrid=drawGridFlag, noTicks</span>) </span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-106">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-106">&#182;</a>
+              </div>
+              <p>draw vertical lines and x axis tick labels</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    context.beginPath();
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">`yGridStep: <span class="hljs-subst">${yGridStep}</span>`</span>);
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> thetaX = xGridInitial; thetaX &lt;= xGridFinal; thetaX+=xGridStep) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-107">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-107">&#182;</a>
+              </div>
+              <p>console.log(thetaX);</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">var</span> xPixel = thetaXtoPixel(thetaX);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-108">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-108">&#182;</a>
+              </div>
+              <p>line starts from bottom trail</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      context.moveTo(xPixel, picBottomTrailingBorder);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-109">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-109">&#182;</a>
+              </div>
+              <p>if using gridlines, line extends top end of top trail</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">var</span> yLineEnd = picTopTrailingBorder;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-110">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-110">&#182;</a>
+              </div>
+              <p>if not using grid lines, draw tick lines</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">if</span> (drawGrid === <span class="hljs-literal">false</span>) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-111">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-111">&#182;</a>
+              </div>
+              <p>tick lines extend one trailing length on either side of axis</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        yLineEnd = picBottomBorder - picBottomTrail;
+      }
+
+      context.lineTo(xPixel, yLineEnd);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-112">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-112">&#182;</a>
+              </div>
+              <p>tick text label</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">var</span> xTickLabel = <span class="hljs-built_in">Number</span>(thetaX).toFixed(<span class="hljs-number">2</span>);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-113">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-113">&#182;</a>
+              </div>
+              <p>catches if yTickLabel is set to “-0.00” due to rounding error and
+converts to “0.00”;
+(note 0 === -0 in javascript)</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">if</span> (<span class="hljs-built_in">Number</span>(xTickLabel) === <span class="hljs-number">-0</span>) {
+        xTickLabel = <span class="hljs-built_in">Number</span>(<span class="hljs-number">0</span>).toFixed(<span class="hljs-number">2</span>);
+      }
+      context.font = tickLabelFont;
+      context.fillStyle = tickLabelColor;
+      context.textAlign = tickLabelAlign;
+      context.textBaseline = tickLabelBaseline;
+      context.fillText(xTickLabel, xPixel, picBottomTrailingBorder + tickLabelSpacing);
+    }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-114">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-114">&#182;</a>
+              </div>
+              <p>draw horizontal lines and y axis tick label</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> thetaY = yGridInitial; thetaY &lt;= yGridFinal; thetaY+=yGridStep) {
+      <span class="hljs-keyword">var</span> yPixel = thetaYtoPixel(thetaY);
+      context.moveTo(picLeftTrailingBorder, yPixel);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-115">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-115">&#182;</a>
+              </div>
+              <p>if using gridlines, line extends to end of right trail</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">var</span> xLineEnd = picRightTrailingBorder;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-116">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-116">&#182;</a>
+              </div>
+              <p>if not using gridlines, draw tick lines</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">if</span> (drawGrid ===<span class="hljs-literal">false</span>)</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-117">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-117">&#182;</a>
+              </div>
+              <p>tick lines extend one trailing length on either side of axis</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        xLineEnd = picLeftBorder + picLeftTrail;
+      context.lineTo(xLineEnd, yPixel);
+
+      <span class="hljs-keyword">var</span> yTickLabel = <span class="hljs-built_in">Number</span>(thetaY).toFixed(<span class="hljs-number">2</span>);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-118">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-118">&#182;</a>
+              </div>
+              <p>catches if yTickLabel is set to “-0.00” due to rounding error and
+converts to “0.00”;
+(note 0 === -0 in javascript)</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">if</span> (<span class="hljs-built_in">Number</span>(yTickLabel) === <span class="hljs-number">-0</span>) {
+        yTickLabel = <span class="hljs-built_in">Number</span>(<span class="hljs-number">0</span>).toFixed(<span class="hljs-number">2</span>);
+      }
+      context.font = tickLabelFont;
+      context.fillStyle = tickLabelColor;
+      context.textAlign = <span class="hljs-string">"right"</span>;
+      context.textBaseline = tickLabelBaseline;
+      context.fillText(yTickLabel,picLeftTrailingBorder - tickLabelSpacing,  yPixel);
+    }
+    context.lineWidth = gridWidth;
+    context.strokeStyle = gridColor;
+    context.stroke();
+  }
+
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">drawPointLensedImages</span>(<span class="hljs-params"></span>) </span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-119">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-119">&#182;</a>
+              </div>
+              <p>console.log(“Lensed image mas position (plus): “ + String(lensedImages.plus.pos.x) + “, “ + String(lensedImages.plus.pos.y));
+console.log(“Lensed image mas position (minus): “ + String(lensedImages.minus.pos.x) + “, “ + String(lensedImages.minus.pos.y));</p>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-120">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-120">&#182;</a>
+              </div>
+              <p>console.log(“Lensed image pixel position (plus): “ + String(lensedImages.plus.pixelPos.x) + “, “ + String(lensedImages.plus.pixelPos.y));
+console.log(“Lensed image pixel position (minus): “ + String(lensedImages.minus.pixelPos.x) + “, “ + String(lensedImages.minus.pixelPos.y));</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+    context.lineWidth = lensedImageLineWidth;
+    context.fillStyle = lensedImagePlusColor;
+    context.strokeStyle = lensedImagePlusOutlineColor;
+
+    context.setLineDash([dashedLensedImageLength, dashedLensedImageSpacing]);
+    context.beginPath();
+    context.arc(lensedImages.plus.pixelPos.x, lensedImages.plus.pixelPos.y, lensedImageRadius, <span class="hljs-number">0</span>, <span class="hljs-number">2</span>*<span class="hljs-built_in">Math</span>.PI, <span class="hljs-literal">false</span>);
+    context.fill();
+    context.stroke();
+
+    context.fillStyle = lensedImageMinusColor;
+    context.strokeStyle = lensedImageMinusOutlineColor;
+    context.beginPath();
+    context.arc(lensedImages.minus.pixelPos.x, lensedImages.minus.pixelPos.y, lensedImageRadius, <span class="hljs-number">0</span>, <span class="hljs-number">2</span>*<span class="hljs-built_in">Math</span>.PI, <span class="hljs-literal">false</span>);
+    context.fill();
+    context.stroke();
+    context.setLineDash([]);
+  }
+
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">drawFullLensedImage</span>(<span class="hljs-params">sign=<span class="hljs-string">"plus"</span>, debug=false, fillOn=true,
+                               strokeOn=false</span>) </span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-121">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-121">&#182;</a>
+              </div>
+              <p>draw either a plus or minus lensed image</p>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-122">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-122">&#182;</a>
+              </div>
+              <p>set aesthetics and select plus or minus outlines object</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    context.lineWidth = lensedImageLineWidth;
+    <span class="hljs-keyword">if</span> (sign === <span class="hljs-string">"plus"</span>) {
+      context.strokeStyle = <span class="hljs-string">"fuchsia"</span>;
+      context.fillStyle = <span class="hljs-string">"purple"</span>;
+
+      <span class="hljs-keyword">if</span> (debug === <span class="hljs-literal">true</span>) {
+        context.fillStyle = <span class="hljs-string">"black"</span>;
+      }
+      <span class="hljs-keyword">var</span> outlines = lensedImageOutlines.plus;
+    }
+
+    <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (sign === <span class="hljs-string">"minus"</span>) {
+      context.strokeStyle = <span class="hljs-string">"lime"</span>;
+      context.fillStyle = <span class="hljs-string">"green"</span>;
+
+      <span class="hljs-keyword">if</span> (debug === <span class="hljs-literal">true</span>) {
+        context.fillStyle = <span class="hljs-string">"DarkGrey"</span>;
+      }
+      <span class="hljs-keyword">var</span> outlines = lensedImageOutlines.minus;
+    }
+
+    <span class="hljs-keyword">else</span> {
+      <span class="hljs-built_in">console</span>.log(<span class="hljs-string">`sign <span class="hljs-subst">${sign}</span> is in valid. Must be "plus" or "minus"`</span>)
+      <span class="hljs-keyword">return</span>;
+    }
+
+    <span class="hljs-keyword">if</span> (outlines === <span class="hljs-literal">undefined</span> || outlines.length === <span class="hljs-number">0</span>) {
+      <span class="hljs-keyword">return</span>;
+    }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-123">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-123">&#182;</a>
+              </div>
+              <p>draw line through each point in outline array</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">if</span> (debug === <span class="hljs-literal">false</span>) {
+      context.beginPath();
+      context.moveTo(outlines[<span class="hljs-number">0</span>].pixelPos.x, outlines[<span class="hljs-number">0</span>].pixelPos.y);
+    }
+
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> index = <span class="hljs-number">0</span>; index&lt;outlines.length; index++) {
+      <span class="hljs-keyword">var</span> pixelPos = outlines[index].pixelPos;
+
+      <span class="hljs-keyword">if</span> (debug === <span class="hljs-literal">false</span>) {
+        context.lineTo(pixelPos.x, pixelPos.y);
+      }
+      <span class="hljs-keyword">else</span> {
+        context.beginPath();</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-124">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-124">&#182;</a>
+              </div>
+              <p>filling in rectangles for points is much faster than
+filling circles with arc function</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        context.fillRect(pixelPos.x<span class="hljs-number">-0.5</span>, pixelPos.y<span class="hljs-number">-0.5</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-125">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-125">&#182;</a>
+              </div>
+              <p>context.arc(pixelPos.x, pixelPos.y, 1, 0, 2*Math.PI);
+context.fill();</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      }
+    }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-126">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-126">&#182;</a>
+              </div>
+              <p>context.closePath();</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">if</span> (debug === <span class="hljs-literal">false</span>) {
+       context.lineTo(outlines[<span class="hljs-number">0</span>].pixelPos.x, outlines[<span class="hljs-number">0</span>].pixelPos.y);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-127">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-127">&#182;</a>
+              </div>
+              <p>context.closePath();</p>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-128">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-128">&#182;</a>
+              </div>
+              <p>context.setLineDash([dashedLensedImageLength, dashedLensedImageSpacing]);</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+      <span class="hljs-keyword">if</span> (fillOn === <span class="hljs-literal">true</span>)
+        context.fill();
+      <span class="hljs-keyword">if</span> (strokeOn === <span class="hljs-literal">true</span>)
+        context.stroke();</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-129">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-129">&#182;</a>
+              </div>
+              <p>context.setLineDash([]);</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    }
+  }
+
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">drawCombinedImage</span>(<span class="hljs-params">fillOn=true, strokeOn=false</span>) </span>{
+
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">drawInnerOutline</span>(<span class="hljs-params"></span>) </span>{
+      context.moveTo(innerOutlines[<span class="hljs-number">0</span>].pixelPos.x, innerOutlines[<span class="hljs-number">0</span>].pixelPos.y);
+      <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i=<span class="hljs-number">1</span>; i&lt;innerOutlines.length; i++) {
+        <span class="hljs-keyword">var</span> pixelPos = innerOutlines[i].pixelPos;
+        context.lineTo(pixelPos.x, pixelPos.y);
+      }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-130">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-130">&#182;</a>
+              </div>
+              <p>context.closePath();</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      context.lineTo(innerOutlines[<span class="hljs-number">0</span>].pixelPos.x, innerOutlines[<span class="hljs-number">0</span>].pixelPos.y);
+
+
+    }
+
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">drawOuterOutline</span>(<span class="hljs-params">outerConnectionIndex</span>) </span>{
+      <span class="hljs-keyword">var</span> seenStartBefore=<span class="hljs-literal">false</span>;
+      <span class="hljs-keyword">var</span> loop = <span class="hljs-literal">true</span>;
+      <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> j=outerConnectionIndex; loop===<span class="hljs-literal">true</span>; j--) {
+        <span class="hljs-keyword">if</span> (j &lt; <span class="hljs-number">0</span>) {
+          j = outerOutlines.length + j;
+        }
+
+        <span class="hljs-keyword">if</span> (j === outerConnectionIndex)  {
+          <span class="hljs-keyword">if</span> (seenStartBefore === <span class="hljs-literal">true</span>) {
+            loop = <span class="hljs-literal">false</span>;
+          }
+          <span class="hljs-keyword">else</span> { <span class="hljs-comment">// seenStartBefore === false</span>
+            seenStartBefore = <span class="hljs-literal">true</span>;
+          }
+        }
+
+        <span class="hljs-keyword">var</span> pixelPos = outerOutlines[j].pixelPos;
+        context.lineTo(pixelPos.x, pixelPos.y);
+      }
+      context.lineTo(outerOutlines[outerOutlines.length<span class="hljs-number">-1</span>].pixelPos.x,
+                     outerOutlines[outerOutlines.length<span class="hljs-number">-1</span>].pixelPos.y);
+    }
+
+    context.lineWidth = lensedImageLineWidth;
+    context.strokeStyle = <span class="hljs-string">"aqua"</span>;
+    context.fillStyle = <span class="hljs-string">"navy"</span>;
+
+    outerOutlines = lensedImageOutlines.plus;
+    innerOutlines = lensedImageOutlines.minus;
+
+    <span class="hljs-keyword">if</span> (outerOutlines === <span class="hljs-literal">undefined</span> || outerOutlines.length === <span class="hljs-number">0</span> ||
+        innerOutlines === <span class="hljs-literal">undefined</span> || innerOutlines.length === <span class="hljs-number">0</span>) {
+      <span class="hljs-keyword">return</span>;
+    }
+
+    <span class="hljs-keyword">if</span> (fillOn === <span class="hljs-literal">true</span>) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-131">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-131">&#182;</a>
+              </div>
+              <p>connect inner outline to outer outline and set outer path start</p>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-132">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-132">&#182;</a>
+              </div>
+              <p>draw inner outline</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      context.beginPath();
+      drawInnerOutline();</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-133">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-133">&#182;</a>
+              </div>
+              <p>set outer outline start</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">var</span> outerConnectionIndex = outerOutlines.length<span class="hljs-number">-1</span>;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-134">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-134">&#182;</a>
+              </div>
+              <p>connect inner outline to outer outline start</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      context.lineTo(outerOutlines[outerConnectionIndex].pixelPos.x, outerOutlines[outerConnectionIndex].pixelPos.y);
+      drawOuterOutline(outerConnectionIndex);
+
+      context.fill();
+    }
+
+    <span class="hljs-keyword">if</span> (strokeOn === <span class="hljs-literal">true</span>) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-135">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-135">&#182;</a>
+              </div>
+              <p>draw separate outline for outer and inner outlines</p>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-136">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-136">&#182;</a>
+              </div>
+              <p>context.setLineDash([dashedLensedImageLength, dashedLensedImageSpacing]);</p>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-137">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-137">&#182;</a>
+              </div>
+              <p>draw and display inner outline</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      context.beginPath();
+      drawInnerOutline();
+      context.stroke();</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-138">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-138">&#182;</a>
+              </div>
+              <p>draw and display outer outline as separate path</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      context.beginPath();</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-139">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-139">&#182;</a>
+              </div>
+              <p>set outer path start point</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">var</span> outerConnectionIndex = outerOutlines.length<span class="hljs-number">-1</span>;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-140">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-140">&#182;</a>
+              </div>
+              <p>move to outer outline start, without connecting inner outline</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      context.moveTo(outerOutlines[outerConnectionIndex].pixelPos.x, outerOutlines[outerConnectionIndex].pixelPos.y);
+      drawOuterOutline(outerConnectionIndex);
+      context.stroke();</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-141">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-141">&#182;</a>
+              </div>
+              <p>context.setLineDash([]);</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    }
+  }
+
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">drawFullLensedImages</span>(<span class="hljs-params">debug=false, fillOn=false, strokeOn=false</span>) </span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-142">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-142">&#182;</a>
+              </div>
+              <p>draw both plus and minus lensed images</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+    sourceLensDistX = sourcePos.x - lens1.pos.x;
+    sourceLensDistY = sourcePos.y - lens1.pos.y;
+    sourceLensDist = <span class="hljs-built_in">Math</span>.sqrt(sourceLensDistX * sourceLensDistX +
+                               sourceLensDistY * sourceLensDistY);
+
+    <span class="hljs-keyword">if</span> (sourceLensDist &lt;= sourceRadius &amp;&amp; debug === <span class="hljs-literal">false</span>) {
+      <span class="hljs-built_in">console</span>.log(<span class="hljs-string">"draw combination of full lensed images"</span>);
+      drawCombinedImage(fillOn, strokeOn);
+    }
+    <span class="hljs-keyword">else</span> {
+      <span class="hljs-built_in">console</span>.log(<span class="hljs-string">"draw full lensed images"</span>);
+      drawFullLensedImage(<span class="hljs-string">"plus"</span>, debug, fillOn, strokeOn); <span class="hljs-comment">// draw plus image</span>
+      drawFullLensedImage(<span class="hljs-string">"minus"</span>, debug, fillOn, strokeOn); <span class="hljs-comment">// draw minus image</span>
+    }
+  }
+
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">unNormalizeCurve</span>(<span class="hljs-params">normalizedCurve</span>) </span>{
+    <span class="hljs-keyword">var</span> curve = {};
+    _.forOwn(normalizedCurve, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">coordList, coordKey</span>) </span>{
+      <span class="hljs-keyword">if</span> (coordKey !== <span class="hljs-string">"transitionIndex"</span>) {
+        curve[coordKey] = numeric.mul(coordList, eventModule.thetaE_mas)
+      }
+    });
+    <span class="hljs-keyword">return</span> curve;
+  }
+
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">pixelizeCoordList</span>(<span class="hljs-params">coordList, axis=<span class="hljs-string">"x"</span></span>) </span>{
+    <span class="hljs-keyword">var</span> pixelizedCoordList = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Array</span>(coordList.length);
+
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i=<span class="hljs-number">0</span>; i&lt;coordList.length; i++) {
+      <span class="hljs-keyword">if</span> (axis === <span class="hljs-string">"y"</span>)
+        pixelizedCoordList[i] = thetaYtoPixel(coordList[i]);
+      <span class="hljs-keyword">else</span>
+        pixelizedCoordList[i] = thetaXtoPixel(coordList[i]);
+    }
+
+    <span class="hljs-keyword">return</span> pixelizedCoordList
+  }
+
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">pixelizeCurve</span>(<span class="hljs-params">curve</span>) </span>{
+    <span class="hljs-keyword">var</span> pixelizedCurve = {};
+    _.forOwn(curve, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">coordList, coordKey</span>) </span>{
+      <span class="hljs-keyword">if</span> (coordKey !== <span class="hljs-string">"transitionIndex"</span>) {
+        pixelizedCurve[coordKey] = pixelizeCoordList(coordList, coordKey[<span class="hljs-number">0</span>]);
+      }
+    });
+    <span class="hljs-keyword">return</span> pixelizedCurve;
+  }
+
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">renderCaustic</span>(<span class="hljs-params">color1=<span class="hljs-string">"purple"</span>, color2=<span class="hljs-string">"green"</span>, pointSizeX,
+                        pointSizeY, context=curveContext</span>) </span>{
+    renderCurve(eventModule.causticNormalized, color1, color2, pointSizeX,
+                pointSizeY, context);
+  }
+
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">renderCrit</span>(<span class="hljs-params">color1=<span class="hljs-string">"purple"</span>, color2=<span class="hljs-string">"green"</span>, pointSizeX,
+                      pointSizeY, context=curveContext</span>) </span>{
+    renderCurve(eventModule.critNormalized, color1, color2, pointSizeX,
+                pointSizeY, context);
+  }
+
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">renderCurves</span>(<span class="hljs-params">causColor1=causticColor1, causColor2=causticColor2,
+                        crtColor1=critColor1, crtColor2=critColor2,
+                        causPointSizeX=causticPointSizeX,
+                        causPointSizeY=causticPointSizeY,
+                        crtPointSizeX=critPointSizeX,
+                        crtPointSizeY=critPointSizeY,
+                        caustic=causticCurveFlag, crit=critCurveFlag,
+                        context=curveContext</span>) </span>{
+    clearPic(context); <span class="hljs-comment">// clear off-screen canvas</span>
+
+    <span class="hljs-keyword">if</span> (caustic === <span class="hljs-literal">true</span>)
+      renderCaustic(causColor1, causColor2, causPointSizeX, causPointSizeY, context);
+
+    <span class="hljs-keyword">if</span> (crit === <span class="hljs-literal">true</span>)
+      renderCrit(crtColor1, crtColor2, crtPointSizeX, crtPointSizeY, context);
+  }
+
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">setPixel</span>(<span class="hljs-params">imageData, x, y, r, g, b, a</span>) </span>{
+
+    <span class="hljs-keyword">if</span> (x &gt;= picLeftBorder &amp;&amp; x &lt;= picRightBorder
+        &amp;&amp; y &gt;= picTopBorder &amp;&amp; y &lt;= picBottomBorder) {
+      index = (x + y * imageData.width) * <span class="hljs-number">4</span>;
+      imageData.data[index+<span class="hljs-number">0</span>] = r;
+      imageData.data[index+<span class="hljs-number">1</span>] = g;
+      imageData.data[index+<span class="hljs-number">2</span>] = b;
+      imageData.data[index+<span class="hljs-number">3</span>] = a;
+    }
+  }
+
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">setPicPixel</span>(<span class="hljs-params">imageData, x, y, r, g, b, a</span>) </span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-143">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-143">&#182;</a>
+              </div>
+              <p>only draw if inside graph borders</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">var</span> xList = [x];
+    <span class="hljs-keyword">var</span> yList = [y];
+
+    xList.push(x + <span class="hljs-number">1</span>);
+    yList.push(y);
+
+    xList.push(x - <span class="hljs-number">1</span>);
+    yList.push(y3 = y);
+
+    xList.push(x);
+    yList.push(y + <span class="hljs-number">1</span>);
+
+    xList.push(x);
+    yList.push(y - <span class="hljs-number">1</span>);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-144">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-144">&#182;</a>
+              </div>
+              <p>xList.push(x + 1);
+yList.push(y + 1);</p>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-145">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-145">&#182;</a>
+              </div>
+              <p>xList.push(x - 1);
+yList.push(y + 1);</p>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-146">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-146">&#182;</a>
+              </div>
+              <p>xList.push(x + 1);
+yList.push(y - 1);</p>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-147">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-147">&#182;</a>
+              </div>
+              <p>xList.push(x - 1);
+yList.push(y - 1);</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i=<span class="hljs-number">0</span>; i&lt;xList.length; i++) {
+      setPixel(imageData, xList[i], yList[i], r, g, b, a);
+    }
+  }
+
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">colorToRGBA</span>(<span class="hljs-params">color</span>) </span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-148">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-148">&#182;</a>
+              </div>
+              <p>Returns the color as an array of [r, g, b, a] – all range from 0 - 255
+color must be a valid canvas fillStyle. This will cover most anything
+you’d want to use.
+Examples:
+colorToRGBA(“red”)  # [255, 0, 0, 255]
+colorToRGBA(“”#f00”) # [255, 0, 0, 255]</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">var</span> tempCanvas = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">"canvas"</span>);
+    tempCanvas.height = <span class="hljs-number">1</span>;
+    tempCanvas.width = <span class="hljs-number">1</span>;
+    <span class="hljs-keyword">var</span> tempContext = tempCanvas.getContext(<span class="hljs-string">"2d"</span>);
+    tempContext.fillStyle = color;
+    tempContext.fillRect(<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>);
+    <span class="hljs-keyword">return</span> tempContext.getImageData(<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>).data;
+  }
+
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">renderCurve</span>(<span class="hljs-params">curveNormalized, color1=<span class="hljs-string">"purple"</span>, color2=<span class="hljs-string">"green"</span>,
+                       pointSizeX, pointSizeY, context=curveContext</span>) </span>{
+    <span class="hljs-keyword">var</span> curve = unNormalizeCurve(curveNormalized);
+    <span class="hljs-keyword">var</span> pixelCurve = pixelizeCurve(curve);
+
+    <span class="hljs-keyword">var</span> drawPointsDebugTest = <span class="hljs-literal">false</span>; <span class="hljs-comment">// fast, but looks kinda bad</span>
+    <span class="hljs-keyword">var</span> drawPoints = <span class="hljs-literal">true</span>;  <span class="hljs-comment">// not quite as fast, but looks good</span>
+    <span class="hljs-keyword">var</span> drawCircles = <span class="hljs-literal">false</span>; <span class="hljs-comment">// slow; don't use this</span>
+    <span class="hljs-keyword">var</span> drawLines = <span class="hljs-literal">false</span>; <span class="hljs-comment">// fastest, but doesn't work right</span>
+
+    <span class="hljs-keyword">if</span> (drawPointsDebugTest === <span class="hljs-literal">true</span>) {
+
+      <span class="hljs-keyword">var</span> color1RGBA = colorToRGBA(color1);
+      <span class="hljs-keyword">var</span> color2RGBA = colorToRGBA(color2);
+
+      context.beginPath();
+      <span class="hljs-keyword">var</span> imageData = context.getImageData(<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, canvas.width, canvas.height); <span class="hljs-comment">// only do this once per page</span>
+
+      <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i=<span class="hljs-number">1</span>; i&lt;pixelCurve.x1.length; i+=<span class="hljs-number">1</span>) {
+        <span class="hljs-keyword">var</span> x1 = <span class="hljs-built_in">Math</span>.round(pixelCurve.x1[i]);
+        <span class="hljs-keyword">var</span> y1 = <span class="hljs-built_in">Math</span>.round(pixelCurve.y1[i]);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-149">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-149">&#182;</a>
+              </div>
+              <p>debug default: 138, 43, 226, 255</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        setPicPixel(imageData, x1, y1, color1RGBA[<span class="hljs-number">0</span>], color1RGBA[<span class="hljs-number">1</span>], color1RGBA[<span class="hljs-number">2</span>], color1RGBA[<span class="hljs-number">3</span>]);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-150">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-150">&#182;</a>
+              </div>
+              <p>context.fillRect(x1, y1, 1, 1);
+window.alert(x1 + “ “ + y1);</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      }
+
+      <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i=<span class="hljs-number">1</span>; i&lt;pixelCurve.x2.length; i+=<span class="hljs-number">1</span>) {
+        <span class="hljs-keyword">var</span> x2 = <span class="hljs-built_in">Math</span>.round(pixelCurve.x2[i]);
+        <span class="hljs-keyword">var</span> y2 = <span class="hljs-built_in">Math</span>.round(pixelCurve.y2[i]);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-151">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-151">&#182;</a>
+              </div>
+              <p>debug default: 0, 128, 0, 255);</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        setPicPixel(imageData, x2, y2, color2RGBA[<span class="hljs-number">0</span>], color2RGBA[<span class="hljs-number">1</span>], color2RGBA[<span class="hljs-number">2</span>], color2RGBA[<span class="hljs-number">3</span>]);
+      }
+
+      context.putImageData(imageData, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>);
+    }
+
+    <span class="hljs-keyword">if</span> (drawPoints === <span class="hljs-literal">true</span>) {
+      context.beginPath();
+      <span class="hljs-keyword">if</span> (color1 === color2) {
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i=<span class="hljs-number">0</span>; i&lt;pixelCurve.x1.length; i+=<span class="hljs-number">1</span>) {
+          <span class="hljs-keyword">var</span> x1 = pixelCurve.x1[i];
+          <span class="hljs-keyword">var</span> y1 = pixelCurve.y1[i];
+          context.rect(x1-pointSizeX/<span class="hljs-number">2</span>, y1-pointSizeY/<span class="hljs-number">2</span>, pointSizeX, pointSizeY);
+
+          <span class="hljs-keyword">var</span> x2 = pixelCurve.x2[i];
+          <span class="hljs-keyword">var</span> y2 = pixelCurve.y2[i];
+          context.rect(x2-pointSizeX/<span class="hljs-number">2</span>, y2-pointSizeY/<span class="hljs-number">2</span>, pointSizeX, pointSizeY);
+        }
+        context.fillStyle = color1;
+        context.fill();
+      }
+      <span class="hljs-keyword">else</span> {
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i=<span class="hljs-number">0</span>; i&lt;pixelCurve.x1.length; i+=<span class="hljs-number">1</span>) {
+          <span class="hljs-keyword">var</span> x1 = pixelCurve.x1[i];
+          <span class="hljs-keyword">var</span> y1 = pixelCurve.y1[i];
+
+          context.rect(x1-pointSizeX/<span class="hljs-number">2</span>, y1-pointSizeY/<span class="hljs-number">2</span>, pointSizeX, pointSizeY);
+        }
+        context.fillStyle = color1;
+        context.fill();
+
+        context.beginPath();
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i=<span class="hljs-number">0</span>; i&lt;pixelCurve.x2.length; i+=<span class="hljs-number">1</span>) {
+          <span class="hljs-keyword">var</span> x2 = pixelCurve.x2[i];
+          <span class="hljs-keyword">var</span> y2 = pixelCurve.y2[i];
+
+          context.rect(x2-pointSizeX/<span class="hljs-number">2</span>, y2-pointSizeY/<span class="hljs-number">2</span>, pointSizeX, pointSizeY);
+        }
+        context.fillStyle = color2;
+        context.fill();
+      }
+    }
+
+    <span class="hljs-keyword">if</span> (drawCircles === <span class="hljs-literal">true</span>) {
+      context.fillStyle = color1;
+      <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i=<span class="hljs-number">0</span>; i&lt;pixelCurve.x1.length; i+=<span class="hljs-number">1</span>) {
+        <span class="hljs-keyword">var</span> x1 = pixelCurve.x1[i];
+        <span class="hljs-keyword">var</span> y1 = pixelCurve.y1[i];
+        context.beginPath();
+        context.arc(x1, y1, pointSizeX, <span class="hljs-number">0</span>, <span class="hljs-number">2</span>*<span class="hljs-built_in">Math</span>.PI, <span class="hljs-literal">false</span>)
+        context.fill();
+      }
+
+      context.fillStyle = color2;
+      <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i=<span class="hljs-number">0</span>; i&lt;pixelCurve.x2.length; i+=<span class="hljs-number">1</span>) {
+        <span class="hljs-keyword">var</span> x2 = pixelCurve.x2[i];
+        <span class="hljs-keyword">var</span> y2 = pixelCurve.y2[i];
+        context.beginPath();
+        context.arc(x2, y2, pointSizeX, <span class="hljs-number">0</span>, <span class="hljs-number">2</span>*<span class="hljs-built_in">Math</span>.PI, <span class="hljs-literal">false</span>)
+        context.fill();
+      }
+    }
+
+    <span class="hljs-keyword">if</span> (drawLines === <span class="hljs-literal">true</span>) {
+      <span class="hljs-keyword">var</span> pointSeparationThreshold = <span class="hljs-number">1</span>; <span class="hljs-comment">// minimum pixel separation allowed</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-152">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-152">&#182;</a>
+              </div>
+              <p>between points that we connect
+with lines</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      context.beginPath();
+      context.moveTo(pixelCurve.x1[<span class="hljs-number">0</span>], pixelCurve.y1[<span class="hljs-number">0</span>]);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-153">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-153">&#182;</a>
+              </div>
+              <p>window.alert(pixelCurve.x1.length);</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+      <span class="hljs-keyword">var</span> prevX1;
+      <span class="hljs-keyword">var</span> prevY1;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-154">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-154">&#182;</a>
+              </div>
+              <p>window.alert(“length: “ + pixelCurve.x1.length);
+debugging: for length 16220, line starts displaying wrong at i=2411</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i=<span class="hljs-number">1</span>; i&lt;pixelCurve.x1.length; i+=<span class="hljs-number">1</span>) {
+        <span class="hljs-keyword">var</span> x1 = pixelCurve.x1[i];
+        <span class="hljs-keyword">var</span> y1 = pixelCurve.y1[i];
+
+        <span class="hljs-keyword">if</span> (prevX1 !== <span class="hljs-literal">undefined</span> &amp;&amp; prevY1 !== <span class="hljs-literal">undefined</span>) {
+          <span class="hljs-keyword">var</span> x1Diff = x1 - prevX1;
+          <span class="hljs-keyword">var</span> y1Diff = y1 - prevY1;
+
+          <span class="hljs-keyword">var</span> dist1 = <span class="hljs-built_in">Math</span>.sqrt(x1Diff*x1Diff + y1Diff*y1Diff);
+
+          <span class="hljs-keyword">if</span> (i === curveNormalized.transitionIndex ) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-155">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-155">&#182;</a>
+              </div>
+              <p>window.alert(“i: “ + i + “\nlength: “ + pixelCurve.x1.length</p>
+<pre><code>         + <span class="hljs-string">"\n\nprevX1: "</span> + prevX1 + <span class="hljs-string">"\nprevY1: "</span> + prevY1
+         + <span class="hljs-string">"\n\nx1: "</span> + x1 + <span class="hljs-string">"\ny1: "</span> + y1
+         + <span class="hljs-string">"\n\ndist1: "</span> + dist1
+         + <span class="hljs-string">"\n\ntransitionIndex: "</span> + curveNormalized.transitionIndex);
+</code></pre>
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+            context.moveTo(x1, y1);
+          }
+          <span class="hljs-keyword">else</span> {
+            context.lineTo(x1, y1);
+          }
+        }
+        <span class="hljs-keyword">else</span>
+          context.lineTo(x1, y1);
+
+        prevX1 = x1;
+        prevY1 = y1;
+      }
+      context.strokeStyle = color1;
+      context.stroke();
+
+      context.beginPath();
+      context.moveTo(pixelCurve.x2[<span class="hljs-number">0</span>], pixelCurve.y2[<span class="hljs-number">0</span>]);
+      <span class="hljs-keyword">var</span> prevX2;
+      <span class="hljs-keyword">var</span> prevY2;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-156">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-156">&#182;</a>
+              </div>
+              <p>debugging: for length 16220, line starts displaying wrong at i=2411</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i=<span class="hljs-number">1</span>; i&lt;pixelCurve.x2.length; i+=<span class="hljs-number">1</span>) {
+        <span class="hljs-keyword">var</span> x2 = pixelCurve.x2[i];
+        <span class="hljs-keyword">var</span> y2 = pixelCurve.y2[i];
+
+        <span class="hljs-keyword">if</span> (prevX2 !== <span class="hljs-literal">undefined</span> &amp;&amp; prevY2 !== <span class="hljs-literal">undefined</span>) {
+          <span class="hljs-keyword">var</span> x2Diff = x2 - prevX2;
+          <span class="hljs-keyword">var</span> y2Diff = y2 - prevY2;
+
+          <span class="hljs-keyword">var</span> dist2 = <span class="hljs-built_in">Math</span>.sqrt(x2Diff*x2Diff + y2Diff*y2Diff);
+
+          <span class="hljs-keyword">if</span> (i === curveNormalized.transitionIndex ) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-157">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-157">&#182;</a>
+              </div>
+              <p>window.alert(“i: “ + i + “\nlength: “ + pixelCurve.x2.length</p>
+<pre><code>         + <span class="hljs-string">"\n\nprevX2: "</span> + prevX2 + <span class="hljs-string">"\nprevY2: "</span> + prevY2
+         + <span class="hljs-string">"\n\nx2: "</span> + x2 + <span class="hljs-string">"\ny2: "</span> + y2
+         + <span class="hljs-string">"\n\ndist2: "</span> + dist2);
+</code></pre>
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+            context.moveTo(x2, y2);
+          }
+          <span class="hljs-keyword">else</span> {
+            context.lineTo(x2, y2);
+          }
+        }
+        <span class="hljs-keyword">else</span>
+          context.lineTo(x2, y2);
+
+        prevX2 = x2;
+        prevY2 = y2;
+      }
+      context.strokeStyle = color2;
+      context.stroke();
+    }
+  }
+
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">drawRenderedCurves</span>(<span class="hljs-params">context=mainContext, imgCanvas=curveCanvas</span>) </span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-158">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-158">&#182;</a>
+              </div>
+              <p>Draw image from image canvas onto (most likely main) context</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    context.drawImage(imgCanvas, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>);
+  }
+
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">convertLensedImagesPos</span>(<span class="hljs-params"></span>) </span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-159">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-159">&#182;</a>
+              </div>
+              <p>Unnormalize positions of lensed images (originally normalized over
+thetaE) and convert them to pixel positions. Store both angular and
+pixel coordinates.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+    <span class="hljs-keyword">var</span> imagesNormalizedPos = eventModule.imagesNormalizedPos;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-160">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-160">&#182;</a>
+              </div>
+              <p>console.log(<code>(binary) imagesNormalizedPos.x.length: ${imagesNormalizedPos.x.length}</code>);
+console.log(<code>(binary) imagesNormalizedPos.x.length: ${imagesNormalizedPos.x[0].length}</code>);</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+    <span class="hljs-keyword">var</span> imageCount = imagesNormalizedPos.x.length;
+    imagesPos = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Array</span>(imageCount);
+    imagesPixelPos = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Array</span>(imageCount);
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i=<span class="hljs-number">0</span>; i&lt;imageCount; i++) {
+      <span class="hljs-keyword">var</span> curveNormalized = {<span class="hljs-attr">x</span>: imagesNormalizedPos.x[i], <span class="hljs-attr">y</span>: imagesNormalizedPos.y[i]};
+      <span class="hljs-keyword">var</span> curve = unNormalizeCurve(curveNormalized);
+      <span class="hljs-keyword">var</span> pixelCurve = pixelizeCurve(curve);
+      imagesPos[i] = curve;
+      imagesPixelPos[i] = pixelCurve;
+    }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-161">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-161">&#182;</a>
+              </div>
+              <p>store result in global variables</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    lensedImagesPos = imagesPos;
+    lensedImagesPixelPos = imagesPixelPos;
+  }
+
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getTimeFromThetaX</span>(<span class="hljs-params">thetaX</span>) </span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-162">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-162">&#182;</a>
+              </div>
+              <p>temp: very hacky</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">var</span> yearToDay = <span class="hljs-number">365.25</span>; <span class="hljs-comment">// day/year; const</span>
+      <span class="hljs-keyword">var</span> eqMu = eventModule.mu / yearToDay; <span class="hljs-comment">// convert mu to milliarcseconds/day</span>
+      <span class="hljs-keyword">var</span> time = thetaX/eqMu + eventModule.t0
+      <span class="hljs-keyword">return</span> time;
+  }
+
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">drawBinaryPointLensedImages</span>(<span class="hljs-params">outlineColors=binaryLensedImageOutlineColors,
+                                       fillColors=binaryLensedImageFillColors,
+                                       pointSizeX=binaryLensedImagePointSizeX,
+                                       pointSizeY=binaryLensedImagePointSizeY,
+                                       debugPlotAllPoints=false</span>) </span>{
+    <span class="hljs-keyword">if</span> (lensedImagesPos === <span class="hljs-literal">undefined</span>) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-163">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-163">&#182;</a>
+              </div>
+              <p>unnormalize and pixelize positions of lensed images</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      convertLensedImagesPos();
+    }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-164">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-164">&#182;</a>
+              </div>
+              <p>debug: this solution is hacky:
+the way this converts back and forth between time and position,
+and iterates through the time array to find the right index
+for the image position arrays, is not good;
+fix: restructure modules to keep track of the time array index</p>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-165">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-165">&#182;</a>
+              </div>
+              <p>also: the image colors appear to change when they really shouldn’t</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">var</span> useHackySolution = <span class="hljs-literal">true</span>;
+
+    <span class="hljs-keyword">if</span> (useHackySolution === <span class="hljs-literal">true</span>) {
+      <span class="hljs-keyword">var</span> time = getTimeFromThetaX(sourcePos.x);
+
+      <span class="hljs-keyword">var</span> times = eventModule.times;
+
+      <span class="hljs-keyword">var</span> timeIndex;
+      <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i=<span class="hljs-number">0</span>; i&lt;times.length; i++) {
+        <span class="hljs-keyword">if</span> (times[i] &gt; time) {
+          timeIndex = i;
+          <span class="hljs-keyword">break</span>;
+        }
+      }
+
+      <span class="hljs-keyword">if</span> (timeIndex === <span class="hljs-literal">undefined</span>)
+        timeIndex = times.length<span class="hljs-number">-1</span>;
+
+      <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i=<span class="hljs-number">0</span>; i&lt;lensedImagesPixelPos.length; i++) {
+        <span class="hljs-keyword">var</span> imagePixelPos = lensedImagesPixelPos[i];
+        <span class="hljs-keyword">var</span> x = imagePixelPos.x[timeIndex];
+        <span class="hljs-keyword">var</span> y = imagePixelPos.y[timeIndex];
+        context.beginPath();
+        context.strokeStyle = outlineColors[i];
+        context.fillStyle = fillColors[i];
+        context.arc(x, y, <span class="hljs-number">4</span>, <span class="hljs-number">0</span>, <span class="hljs-number">2</span>*<span class="hljs-built_in">Math</span>.PI, <span class="hljs-literal">false</span>);
+        context.fill();
+        context.stroke();
+      }
+    }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-166">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-166">&#182;</a>
+              </div>
+              <p>debug: plots every x,y point in image arrays, coded by color, regardless of
+time; produces some wacky looking curves; neato</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">if</span> (debugPlotAllPoints === <span class="hljs-literal">true</span>) {
+      <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i=<span class="hljs-number">0</span>; i&lt;lensedImagesPixelPos.length; i++) {
+        <span class="hljs-keyword">var</span> imagePixelPos = lensedImagesPixelPos[i];</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-167">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-167">&#182;</a>
+              </div>
+              <p>context.rect(imagePixelPos.x[100], imagePixelPos.y[100], 10, 10);</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+        context.beginPath();
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> j=<span class="hljs-number">0</span>; j&lt;imagePixelPos.x.length; j++) {
+          <span class="hljs-keyword">var</span> x = imagePixelPos.x[j];
+          <span class="hljs-keyword">var</span> y = imagePixelPos.y[j];
+          context.rect(x, y, pointSizeX, pointSizeY);
+        }
+        context.fillStyle = fillColors[i];
+        context.fill();
+      }
+    }
+
+  }
+
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">drawPic</span>(<span class="hljs-params">isBinary=binaryFlag, displayImageShape=displayImageShapeFlag,
+                   context=mainContext, canvas=mainCanvas</span>) </span>{
+    clearPic();
+    drawBackgrounds();
+    drawBorder();
+    drawGridlinesAndTicks();
+    toggleClippingRegion(turnOn=<span class="hljs-literal">true</span>);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-168">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-168">&#182;</a>
+              </div>
+              <p>drawSource(useOutline=true);</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    drawUarrow();
+    <span class="hljs-keyword">if</span> (displayImageShape === <span class="hljs-literal">true</span> &amp;&amp; isBinary === <span class="hljs-literal">false</span>) {
+      <span class="hljs-keyword">if</span> (eventModule.finiteSourceFlag === <span class="hljs-literal">false</span>)
+        drawPointLensedImages();
+      <span class="hljs-keyword">else</span> {
+        <span class="hljs-keyword">if</span> (clippingImageFlag === <span class="hljs-literal">true</span>) {
+          context.save();
+          context.beginPath();
+          context.rect(<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, canvas.width, context.canvas.height);
+          context.arc(lens1.pixelPos.x, lens1.pixelPos.y, ringRadius.x, <span class="hljs-number">0</span>, <span class="hljs-built_in">Math</span>.PI * <span class="hljs-number">2</span>, <span class="hljs-literal">true</span>);
+          context.clip();
+        }
+        drawFullLensedImages(debug=<span class="hljs-literal">false</span>, fillOn=<span class="hljs-literal">true</span>, strokeOn=<span class="hljs-literal">true</span>);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-169">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-169">&#182;</a>
+              </div>
+              <p>drawFullLensedImages(debug=true);</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">if</span> (clippingImageFlag === <span class="hljs-literal">true</span>)
+          context.restore();
+      }
+    }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-170">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-170">&#182;</a>
+              </div>
+              <p>drawPointLensedImages();</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    drawLens(lens1);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-171">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-171">&#182;</a>
+              </div>
+              <p>drawPointLensedImages();</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">if</span> (isBinary === <span class="hljs-literal">true</span>) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-172">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-172">&#182;</a>
+              </div>
+              <p>draw second lens</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      drawLens(lens2);
+
+      <span class="hljs-keyword">if</span> (causticCurveFlag === <span class="hljs-literal">true</span> || critCurveFlag === <span class="hljs-literal">true</span>) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-173">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-173">&#182;</a>
+              </div>
+              <p>draw caustic and/or crit</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+        drawRenderedCurves();</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-174">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-174">&#182;</a>
+              </div>
+              <p>context.fillRect(canvas.width/2, canvas.height/2, 50*Math.random(), 50);</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      }
+
+      <span class="hljs-keyword">if</span> (separateBinaryRingsFlag === <span class="hljs-literal">true</span>) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-175">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-175">&#182;</a>
+              </div>
+              <p>draw separate rings for each lens</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        drawRing(lens1);
+        drawRing(lens2);
+      }
+      drawBinaryPointLensedImages();
+    }
+    <span class="hljs-keyword">else</span> { <span class="hljs-comment">// single, non-binary lens</span>
+      drawRing(lens1);
+    }
+    drawSourcePath();
+    drawSource();
+
+    toggleClippingRegion(turnOn=<span class="hljs-literal">false</span>);
+    drawAxes();
+  }
+
+  <span class="hljs-keyword">return</span> {
+    <span class="hljs-attr">renderCurves</span>: renderCurves,
+    <span class="hljs-attr">convertLensedImagesPos</span>: convertLensedImagesPos,
+    <span class="hljs-attr">drawPic</span>: drawPic,
+  }
+
+})();</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-176">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-176">&#182;</a>
+              </div>
+              <p>public properties to be stored in module object,
+accessible via module object by code executed after this script</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+<span class="hljs-built_in">module</span>.exports = {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-177">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-177">&#182;</a>
+              </div>
+              <p>initialization</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  init: init, <span class="hljs-comment">// initialization function</span>
+  get initialized() { <span class="hljs-keyword">return</span> initialized; }, <span class="hljs-comment">// whether initialization is done</span>
+
+  get sourcePos() { <span class="hljs-keyword">return</span> sourcePos; }, <span class="hljs-comment">// mas</span>
+  get xAxisInitialThetaX() { <span class="hljs-keyword">return</span> xAxisInitialThetaX; }, <span class="hljs-comment">// mas</span>
+  get sourceRadius() { <span class="hljs-keyword">return</span> sourceRadius; }, <span class="hljs-comment">// mas</span>
+  renderCurves: drawing.renderCurves,
+  <span class="hljs-attr">convertLensedImagesPos</span>: drawing.convertLensedImagesPos,
+  <span class="hljs-attr">redraw</span>: redraw,
+  <span class="hljs-attr">getThetaX</span>: getThetaX,
+  <span class="hljs-attr">initSourceRadius</span>: initSourceRadius,
+};</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>

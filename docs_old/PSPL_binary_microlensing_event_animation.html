@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>PSPL_binary_microlensing_event_animation.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>PSPL_binary_microlensing_event_animation.js</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-built_in">console</span>.log(<span class="hljs-string">"Executing PSPL_binary_microlensing_event_animation.js"</span>);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>var eventModule = PSPL_binary_microlensing_event;
+var lensPlaneModule = PSPL_binary_microlensing_event_lens_plane;</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+<span class="hljs-keyword">var</span> eventModule = <span class="hljs-built_in">require</span>(<span class="hljs-string">"./PSPL_binary_microlensing_event.js"</span>);
+<span class="hljs-keyword">var</span> lensPlaneModule = <span class="hljs-built_in">require</span>(<span class="hljs-string">"./PSPL_binary_microlensing_event_lens_plane.js"</span>);
+
+<span class="hljs-keyword">var</span> initialized = <span class="hljs-literal">false</span>; <span class="hljs-comment">// whether module init function has been executed</span>
+
+<span class="hljs-keyword">var</span> fps = <span class="hljs-number">60</span>; <span class="hljs-comment">// frames rendered per second (ideally; runs slow in non-Chrome browsers now)</span>
+
+<span class="hljs-keyword">var</span> time;
+<span class="hljs-keyword">var</span> timer;
+<span class="hljs-keyword">var</span> running = <span class="hljs-literal">false</span>;
+
+<span class="hljs-keyword">var</span> minTime;
+<span class="hljs-keyword">var</span> maxTime;
+<span class="hljs-keyword">var</span> animationStep = <span class="hljs-number">0.1</span>; <span class="hljs-comment">// (days) time step per frame of animation</span>
+<span class="hljs-keyword">var</span> playbackControlStep = <span class="hljs-number">5</span>; <span class="hljs-comment">// (days) time step for "stepBack" and "stepForward" playback commands</span>
+
+<span class="hljs-keyword">var</span> timeReadout = <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">"timeReadout"</span>);
+<span class="hljs-keyword">var</span> stepBackButton = <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">"stepBack"</span>);
+<span class="hljs-keyword">var</span> playButton = <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">"play"</span>);
+<span class="hljs-keyword">var</span> pauseButton = <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">"pause"</span>);
+<span class="hljs-keyword">var</span> stepForwardButton = <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">"stepForward"</span>);
+<span class="hljs-keyword">var</span> timeResetButton = <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">"timeReset"</span>);
+
+<span class="hljs-keyword">var</span> roundingErrorThreshold = <span class="hljs-number">1e-12</span>; <span class="hljs-comment">// if values passed to almostEquals have a smaller difference</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>than this, they will pass as “almost” equal</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">init</span>(<span class="hljs-params"></span>) </span>{
+  updateMinAndMaxTimes();
+  <span class="hljs-keyword">if</span> (animationStep &gt;= <span class="hljs-number">0</span>)
+    time = minTime;
+  <span class="hljs-keyword">else</span>
+    time = maxTime;
+  timeReadout.innerHTML = <span class="hljs-built_in">Number</span>(time).toFixed(<span class="hljs-number">4</span>);
+  initListeners();
+  initialized = <span class="hljs-literal">true</span>;
+}
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">updateMinAndMaxTimes</span>(<span class="hljs-params">min, max</span>) </span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>default to min/max values of lightcurve plot time axis</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">if</span> (min === <span class="hljs-literal">undefined</span>)
+    min = eventModule.xAxisInitialDay;
+
+  <span class="hljs-keyword">if</span> (max === <span class="hljs-literal">undefined</span>)
+    max = eventModule.xAxisFinalDay;
+
+  minTime = min;
+  maxTime = max;
+}
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">initListeners</span>(<span class="hljs-params"></span>) </span>{
+  stepBackButton.addEventListener(<span class="hljs-string">"click"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{ updatePlayback(<span class="hljs-string">"stepBack"</span>); }, <span class="hljs-literal">false</span>);
+  playButton.addEventListener(<span class="hljs-string">"click"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{ updatePlayback(<span class="hljs-string">"play"</span>); }, <span class="hljs-literal">false</span>);
+  pauseButton.addEventListener(<span class="hljs-string">"click"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{ updatePlayback(<span class="hljs-string">"pause"</span>); }, <span class="hljs-literal">false</span>);
+  stepForwardButton.addEventListener(<span class="hljs-string">"click"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{ updatePlayback(<span class="hljs-string">"stepForward"</span>); }, <span class="hljs-literal">false</span>);
+  timeResetButton.addEventListener(<span class="hljs-string">"click"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{ updatePlayback(<span class="hljs-string">"timeReset"</span>); }, <span class="hljs-literal">false</span>);
+}
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">run</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">if</span> (running === <span class="hljs-literal">true</span>) {
+    timer = <span class="hljs-built_in">window</span>.setTimeout(run, <span class="hljs-number">1000</span>/fps);
+
+    updateMinAndMaxTimes();
+    updateTime(time + animationStep);
+
+    animateFrame();
+
+    <span class="hljs-keyword">if</span> (time &gt;= maxTime || almostEquals(time, maxTime) === <span class="hljs-literal">true</span> ||
+        time &lt;= minTime || almostEquals(time, minTime) === <span class="hljs-literal">true</span>) {
+      updatePlayback(<span class="hljs-string">"Pause"</span>);
+    }
+  }
+}
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">almostEquals</span>(<span class="hljs-params">a, b, epsilon=roundingErrorThreshold</span>) </span>{
+  <span class="hljs-keyword">return</span> (<span class="hljs-built_in">Math</span>.abs(a - b) &lt; epsilon);
+}
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">updateTime</span>(<span class="hljs-params">newTime</span>) </span>{
+
+  <span class="hljs-keyword">var</span> newTimeOverMax = <span class="hljs-literal">false</span>;
+  <span class="hljs-keyword">var</span> newTimeUnderMin = <span class="hljs-literal">false</span>;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>don’t let time exceed maximum limit</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">if</span> (newTime &gt;= maxTime || almostEquals(newTime, maxTime) === <span class="hljs-literal">true</span>) {
+    newTime = maxTime;
+    newTimeOverMax = <span class="hljs-literal">true</span>;
+  }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p>don’t let time fall under minimum limit</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">if</span> (newTime &lt;= minTime || almostEquals(newTime, minTime) === <span class="hljs-literal">true</span>) {
+    newTime = minTime;
+    newTimeUnderMin = <span class="hljs-literal">true</span>;
+  }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <p>Pause animation if time has reached minimum or maximum limit</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">if</span> (newTimeOverMax === <span class="hljs-literal">true</span> &amp;&amp; newTimeUnderMin === <span class="hljs-literal">true</span>)
+    updatePlayback(<span class="hljs-string">"Pause"</span>);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <p>update time property</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  time = newTime;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <p>update time readout on page
+makes sure we display “0.00” instead of “-0.00” if 0 time has rounding error</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">var</span> newTimeReadout = <span class="hljs-built_in">Number</span>(time).toFixed(<span class="hljs-number">4</span>);
+  <span class="hljs-keyword">if</span> (almostEquals(time, <span class="hljs-number">0</span>) === <span class="hljs-literal">true</span>) {
+    newTimeReadout = <span class="hljs-built_in">Number</span>(<span class="hljs-number">0</span>).toFixed(<span class="hljs-number">4</span>);
+  }
+  timeReadout.innerHTML = newTimeReadout; <span class="hljs-comment">// update time readout</span>
+}
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">animateFrame</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">"animating frame"</span>);
+
+  eventModule.plotLightcurve(time); <span class="hljs-comment">// animate frame for lightcurve</span>
+  animateFrameSource(); <span class="hljs-comment">// animate frame for source movement on lens plane figure</span>
+  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">"TIME: "</span> + time);
+  <span class="hljs-keyword">var</span> u = eventModule.getU(eventModule.getTimeTerm(time));
+  <span class="hljs-keyword">var</span> magnif = eventModule.getMagnif(time);
+  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">"debugging u: "</span> + <span class="hljs-built_in">String</span>(u));
+  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">"debugging magnif: "</span> + <span class="hljs-built_in">String</span>(magnif));
+}
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">animateFrameSource</span>(<span class="hljs-params"></span>) </span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <p>update source thetaX position for new time</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  lensPlaneModule.sourcePos.x = lensPlaneModule.getThetaX(time);
+  lensPlaneModule.redraw();
+}
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">updatePlayback</span>(<span class="hljs-params">command=<span class="hljs-string">"play"</span>, updateFrame=true</span>) </span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-11">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-11">&#182;</a>
+              </div>
+              <p>setting updateFrame to false lets us modify the internal frame without
+actually updating the display, in case we want to issue multiple playback
+command before actually updating the displayed frame (like multiple
+steps backwards/forwards)</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-built_in">window</span>.clearTimeout(timer);
+
+  <span class="hljs-keyword">if</span> (command === <span class="hljs-string">"stepBack"</span>) {
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">"step back"</span>);
+    <span class="hljs-keyword">if</span> (time &gt; minTime &amp;&amp; almostEquals(time, minTime) === <span class="hljs-literal">false</span>) {
+      updateTime(time - playbackControlStep);
+      <span class="hljs-keyword">if</span> (updateFrame === <span class="hljs-literal">true</span>)
+        animateFrame();
+    }
+  }
+  <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (command === <span class="hljs-string">"play"</span>) {
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">"play"</span>);
+    <span class="hljs-built_in">console</span>.log(time);
+    <span class="hljs-keyword">if</span> (time &gt;= maxTime || almostEquals(time, maxTime) === <span class="hljs-literal">true</span> ||
+        time &lt;= minTime || almostEquals(time, minTime) === <span class="hljs-literal">true</span>) {
+      updatePlayback(<span class="hljs-string">"timeReset"</span>);
+      <span class="hljs-built_in">console</span>.log(<span class="hljs-string">"At or past time limit, reset"</span>);
+    }
+    running = <span class="hljs-literal">true</span>;
+    run();
+  }
+  <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (command === <span class="hljs-string">"pause"</span>) {
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">"pause"</span>);
+    running = <span class="hljs-literal">false</span>;
+  }
+  <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (command === <span class="hljs-string">"stepForward"</span>) {
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">"step forward"</span>);
+    updateTime(time + playbackControlStep);
+    <span class="hljs-keyword">if</span> (updateFrame === <span class="hljs-literal">true</span>)
+      animateFrame();
+  }
+  <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (command === <span class="hljs-string">"timeReset"</span>) {
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">"reset time"</span>);
+    running = <span class="hljs-literal">false</span>;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-12">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-12">&#182;</a>
+              </div>
+              <p>if playing forwards (positive step), reset to minimum time</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">var</span> newTime;
+    <span class="hljs-keyword">if</span> (animationStep &gt;= <span class="hljs-number">0</span>)
+      newTime = minTime;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-13">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-13">&#182;</a>
+              </div>
+              <p>if playing backwards (negative step), reset to maximum time</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">else</span> <span class="hljs-comment">// animationStep &lt; 0</span>
+      newTime = maxTime;
+
+    updateTime(newTime);
+    <span class="hljs-keyword">if</span> (updateFrame === <span class="hljs-literal">true</span>)
+      animateFrame();
+  }
+}
+
+<span class="hljs-built_in">module</span>.exports = {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-14">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-14">&#182;</a>
+              </div>
+              <p>initialization</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  init: init, <span class="hljs-comment">// initialization function</span>
+  get initialized() { <span class="hljs-keyword">return</span> initialized; }, <span class="hljs-comment">// whether initialization is done</span>
+
+  get running() { <span class="hljs-keyword">return</span> running; },
+  get time() { <span class="hljs-keyword">return</span> time; },
+
+  <span class="hljs-attr">updatePlayback</span>: updatePlayback,
+  <span class="hljs-attr">animateFrame</span>: animateFrame,
+}</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>
